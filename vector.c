@@ -1,0 +1,106 @@
+#include "vector.h"
+#include <math.h>
+
+t_vec3	vec3(int x, int y, int z)
+{
+	t_vec3 v;
+
+	v.x = x;
+	v.y = y;
+	v.z = z;
+	return (v);
+}
+
+t_vec3	vvec3(t_vec3 *v)
+{
+	t_vec3 o;
+
+	o.x = v->x;
+	o.y = v->y;
+	o.z = v->z;
+	return (o);
+}
+
+// vec.xyz * t
+t_vec3	v_mul(t_vec3 *v, double t)
+{
+	t_vec3	o;
+
+	o.x = v->x * t;
+	o.y = v->y * t;
+	o.z = v->z * t;
+	return (o);
+}
+
+// vec.xyz * (1/t)
+t_vec3	v_div(t_vec3 *v, double t)
+{
+	t_vec3	o;
+
+	o.x = v->x * (1/t);
+	o.y = v->y * (1/t);
+	o.z = v->z * (1/t);
+	return (o);
+}
+
+// sqrt(vec.xyz squared)
+double	v_len(t_vec3 *v)
+{
+	double len_squared = 
+		(v->x * v->x) + 
+		(v->y * v->y) +
+		(v->z * v->z);
+	return (sqrt(len_squared));
+}
+
+// vec3.xyz + vec3.xyz
+t_vec3	vv_sum(t_vec3 *a, t_vec3 *b)
+{
+	t_vec3	o;
+
+	o.x = (a->x + b->x);
+	o.y = (a->y + b->y);
+	o.z = (a->z + b->z);
+	return o;
+}
+
+// vec3.xyz - vec3.xyz
+t_vec3	vv_sub(t_vec3 *a, t_vec3 *b)
+{
+	t_vec3	o;
+
+	o.x = a->x - b->x;
+	o.y = a->y - b->y;
+	o.z = a->z - b->z;
+	return o;
+}
+
+// vec3.xyz * vec3.xyz
+t_vec3	vv_mul(t_vec3 *a, t_vec3 *b)
+{
+	t_vec3	o;
+
+	o.x = (a->x * b->x);
+	o.y = (a->y * b->y);
+	o.z = (a->z * b->z);
+	return o;
+}
+
+// (vec3.x * vec3.x) + (vec3.y * vec3.y) + (vec3.z * vec3.z)
+double	vv_dot(t_vec3 *a, t_vec3 *b)
+{
+	double dot = 
+		(a->x * b->x) + 
+		(a->y * b->y) +
+		(a->z * b->z);
+	return (dot);
+}
+
+//	vec3.xyz / vec3 len
+t_vec3	unit_vector(t_vec3 *v)
+{
+	t_vec3	o;
+
+	o = v_div(v, v_len(v));
+	return (o);
+}
