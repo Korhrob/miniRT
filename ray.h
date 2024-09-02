@@ -1,6 +1,9 @@
-#pragma once
+#ifndef RAY_H
+# define RAY_H
+
 #include "vector.h"
 #include "color.h"
+#include "list.h"
 
 typedef struct	s_ray
 {
@@ -8,5 +11,7 @@ typedef struct	s_ray
 	t_vec3	dir;
 }	t_ray;
 
-t_color	ray_color(t_ray *ray);
+t_color	ray_color(t_ray *ray, t_list *list);
 t_point at(t_ray *ray, double t);
+
+#endif
