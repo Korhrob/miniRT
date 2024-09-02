@@ -17,6 +17,7 @@ typedef struct s_hit_record
 	t_vec3	normal;
 	double	t;
 	int		front;
+	void	*shape;
 }	t_hit;
 
 typedef	struct s_shape

@@ -35,7 +35,7 @@ int	hit_sphere(t_ray *ray, double ray_tmin, double ray_tmax, t_sphere *this, t_h
 	rec->normal = v_div(rec->normal, this->radius);
 
 	rec->front = vv_dot(ray->dir, rec->normal) < 0;
-	if (rec->front < 0)
+	if (!rec->front)
 		rec->normal = v_mul(rec->normal, -1);
 
 	return TRUE;
