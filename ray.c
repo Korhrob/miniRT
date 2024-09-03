@@ -1,5 +1,6 @@
 #include <math.h>
 #include <stddef.h>
+
 #include "ray.h"
 #include "vector.h"
 #include "color.h"
@@ -9,9 +10,7 @@
 #include "list.h"
 #include "range.h"
 #include "hit.h"
-
-const double infinity = 1.7976931348623157E+308;
-const double pi = 3.1415926535897932385;
+#include "light.h"
 
 t_point at(t_ray *ray, double t)
 {
@@ -41,7 +40,7 @@ int	ray_hit(t_ray *ray, t_hit *rec, t_range range, t_list *list)
 				rec->normal = temp_rec.normal;
 				rec->t = temp_rec.t;
 				rec->front = temp_rec.front;
-				rec->shape = shape;
+				rec->shape = (void *)&shape->shape;
 			}
 		}
 		else if (list->type == PLANE)
@@ -60,10 +59,25 @@ t_color	ray_color(t_ray *ray, t_list *list)
 {
 	t_hit		rec;
 
-	if (ray_hit(ray, &rec, new_range(0, infinity), list))
+	if (ray_hit(ray, &rec, new_range(0, INFINITY), list))
 	{
-		t_color	color = vv_sum(rec.normal, vec3(1, 1, 1));
-		return v_mul(color, 0.5);
+		// t_color	color = vv_sum(rec.normal, vec3(1, 1, 1)); // normals as color
+		// return v_mul(color, 0.5);
+
+		// surface color
+		t_shape	*shape = (t_shape*)rec.shape;
+		t_color	color = shape->color;
+
+		// ambient light
+		t_ambient	ambient;
+
+		color = vv_mul(color, vec3(1,1,1)); // ambient light color
+		color = v_mul(color, 0.5); // ambient light strength
+
+		// light
+
+		return (color);
+
 	}
 
 	t_vec3	unit_direction = unit_vector(ray->dir);

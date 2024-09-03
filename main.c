@@ -28,21 +28,21 @@ void displayProgressBar(int progress, int total) {
 int	main(void)
 {
 	t_image		image = init_image(16.0 / 9.0, 400);
-	t_camera	camera = init_camera(image, 90.0);
+	t_camera	camera = init_camera(image, 45.0);
 
 	// Object list - fake list for now
 	t_list *list;
 	t_list *temp;
 
-	t_sphere *data = new_sphere(vec3(0, 0, -1), 0.5);
+	t_sphere *data = new_sphere(vec3(0, 0, -3), 0.5, vec3(1, 0, 0));
 	temp = new_list(data, SPHERE);
 	list_add(&list, temp);
 
-	t_sphere *data_1 = new_sphere(vec3(0, -100.5, -1), 100);
+	t_sphere *data_1 = new_sphere(vec3(0, -100.5, -3), 100, vec3(0, 1, 0));
 	temp = new_list(data_1, SPHERE);
 	list_add(&list, temp);
 
-	t_sphere *data_2 = new_sphere(vec3(2.5, 1.5, -2), 0.25);
+	t_sphere *data_2 = new_sphere(vec3(2, 1, -3), 0.25, vec3(0, 0, 1));
 	temp = new_list(data_2, SPHERE);
 	list_add(&list, temp);
 

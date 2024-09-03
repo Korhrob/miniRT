@@ -4,12 +4,20 @@
 #include "minirt.h"
 #include "vector.h"
 #include "ray.h"
+#include "color.h"
 
 typedef	struct s_shape
 {
 	t_point			pos; // position
 	enum e_shape	type;
+	t_color			color;
 }	t_shape;
+
+typedef struct s_generic_shape
+{
+	t_shape			*data;
+}	t_generic;
+
 
 typedef struct s_cylinder
 {

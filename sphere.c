@@ -8,6 +8,7 @@
 #include "sphere.h"
 #include "range.h"
 #include "hit.h"
+#include "color.h"
 
 int	hit_sphere(t_ray *ray, t_range range, t_sphere *this, t_hit *rec)
 {
@@ -43,7 +44,7 @@ int	hit_sphere(t_ray *ray, t_range range, t_sphere *this, t_hit *rec)
 	return TRUE;
 }
 
-t_sphere	*new_sphere(t_point pos, double radius)
+t_sphere	*new_sphere(t_point pos, double radius, t_color color)
 {
 	t_sphere	*sphere;
 
@@ -55,6 +56,9 @@ t_sphere	*new_sphere(t_point pos, double radius)
 	sphere->shape.pos.y = pos.y;
 	sphere->shape.pos.z = pos.z;
 	sphere->radius = radius;
+	sphere->shape.color.x = color.x;
+	sphere->shape.color.y = color.y;
+	sphere->shape.color.z = color.z;
 	sphere->hit = hit_sphere;
 	return sphere;
 }
