@@ -1,5 +1,6 @@
 #ifndef COLOR_H
 # define COLOR_H
+
 #include "vector.h"
 
 typedef t_vec3 t_color;

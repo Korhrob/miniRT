@@ -6,8 +6,10 @@
 #include "ray.h"
 #include "shape.h"
 #include "sphere.h"
+#include "range.h"
+#include "hit.h"
 
-int	hit_sphere(t_ray *ray, double ray_tmin, double ray_tmax, t_sphere *this, t_hit *rec)
+int	hit_sphere(t_ray *ray, t_range range, t_sphere *this, t_hit *rec)
 {
 	t_vec3	oc = vv_sub(this->shape.pos, ray->origin);
 
@@ -22,10 +24,10 @@ int	hit_sphere(t_ray *ray, double ray_tmin, double ray_tmax, t_sphere *this, t_h
 	double	sqrtd = sqrt(discriminant);
 
 	double	root = (h - sqrtd) / a;
-	if (root <= ray_tmin || root > ray_tmax)
+	if (!in_range_equal(range, root))
 	{
 		root = (h + sqrtd) / a;
-		if (root <= ray_tmin || root > ray_tmax)
+		if (!in_range_equal(range, root))
 			return FALSE;
 	}
 

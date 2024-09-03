@@ -5,6 +5,8 @@
 #include "minirt.h"
 #include "list.h"
 #include "sphere.h"
+#include "image.h"
+#include "camera.h"
 
 void displayProgressBar(int progress, int total) {
     int barWidth = 16;  // Width of the progress bar in characters
@@ -24,30 +26,8 @@ void displayProgressBar(int progress, int total) {
 
 int	main(void)
 {
-	int		fd;
-	double	aspect_ratio = 16.0 / 9.0;
-	int		image_width = 400;
-
-	int		image_height = (int)((double)image_width / aspect_ratio);
-	if (image_height < 1)
-		image_height = 1;
-
-	double	focal_length = 1.0;
-	double	viewport_height = 2.0;
-	double	viewport_width = viewport_height * ((double)image_width / image_height);
-	t_point	camera_center = vec3(0, 0, 0);
-
-	t_vec3	viewport_u = vec3(viewport_width, 0, 0);
-	t_vec3	viewport_v = vec3(0, -viewport_height, 0);
-
-	t_vec3	pixel_delta_u = v_div(viewport_u, image_width);
-	t_vec3	pixel_delta_v = v_div(viewport_v, image_height);
-
-	t_vec3	viewport_ul = vv_sub(camera_center, vec3(0, 0, focal_length));
-	viewport_ul = vv_sub(viewport_ul, v_div(viewport_u, 2));
-	viewport_ul = vv_sub(viewport_ul, v_div(viewport_v, 2));
-
-	t_vec3	pixel00_loc = vv_sum(viewport_ul, v_mul(vv_sum(pixel_delta_u, pixel_delta_v), 0.5));
+	t_image		image = init_image(16.0 / 9.0, 400);
+	t_camera	camera = init_camera(image);
 
 	// Object list - fake list for now
 	t_list *list;
@@ -65,35 +45,5 @@ int	main(void)
 	list_temp->type = SPHERE;
 	list->next = list_temp;
 
-	printf("create file\n");
-	fd = open("image.ppm", O_WRONLY | O_CREAT | O_TRUNC, 0666);
-	if (fd == -1)
-	{
-		printf("failed to create file\n");
-		exit(1);
-	}
-	close(fd);
-	fd = open("image.ppm", O_WRONLY | O_CREAT | O_APPEND);
-
-	dprintf(fd, "P3\n%d %d\n255\n", image_width, image_height);
-	printf("rendering...\n");
-
-	for (int y = 0; y < image_height; y++)
-	{
-		displayProgressBar(y, image_height);
-		for (int x = 0; x < image_width; x++)
-		{
-			t_point	pixel_center = vvec3(pixel00_loc);
-			pixel_center = vv_sum(pixel_center, v_mul(pixel_delta_u, x));
-			pixel_center = vv_sum(pixel_center, v_mul(pixel_delta_v, y));
-
-			t_vec3	ray_direction = vv_sub(pixel_center, camera_center);
-			t_ray	ray = { camera_center, ray_direction };
-
-			write_color(fd, ray_color(&ray, list));
-		}
-	}
-
-	close(fd);
-	printf("\ndone\n");
+	render(camera, image, list);
 }

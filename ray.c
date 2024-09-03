@@ -6,6 +6,8 @@
 #include "shape.h"
 #include "sphere.h"
 #include "list.h"
+#include "range.h"
+#include "hit.h"
 
 const double infinity = 1.7976931348623157E+308;
 const double pi = 3.1415926535897932385;
@@ -18,17 +20,17 @@ t_point at(t_ray *ray, double t)
 	return (vv_sum(origin, dir));
 }
 
-int	ray_hit(t_ray *ray, t_hit *rec, double tmin, double tmax, t_list *list)
+int	ray_hit(t_ray *ray, t_hit *rec, t_range range, t_list *list)
 {
 	t_hit	temp_rec;
 	int		hit = FALSE;
-	double	closest = tmax;
+	double	closest = range.max;
 
 	while (list != NULL)
 	{
 		// temp conversion to sphere, should check enum type
 		t_sphere *shape = list->data; 
-		if (shape->hit(ray, tmin, closest, shape, &temp_rec))
+		if (shape->hit(ray, new_range(range.min, closest), shape, &temp_rec))
 		{
 			hit = TRUE;
 			closest = temp_rec.t;
@@ -47,14 +49,10 @@ t_color	ray_color(t_ray *ray, t_list *list)
 {
 	t_hit		rec;
 
-	if (ray_hit(ray, &rec, 0, infinity, list))
+	if (ray_hit(ray, &rec, new_range(0, infinity), list))
 	{
-		t_sphere *shape = rec.shape; 
-		if (shape->hit(ray, 0, infinity, shape, &rec))
-		{
-			t_color	color = vv_sum(rec.normal, vec3(1, 1, 1));
-			return v_mul(color, 0.5);
-		}
+		t_color	color = vv_sum(rec.normal, vec3(1, 1, 1));
+		return v_mul(color, 0.5);
 	}
 
 	t_vec3	unit_direction = unit_vector(ray->dir);

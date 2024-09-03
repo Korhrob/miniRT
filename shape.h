@@ -5,21 +5,6 @@
 #include "vector.h"
 #include "ray.h"
 
-/*
-* p = position
-* n = normal
-* t = distance
-* f = is front face
-*/
-typedef struct s_hit_record
-{
-	t_point	point;
-	t_vec3	normal;
-	double	t;
-	int		front;
-	void	*shape;
-}	t_hit;
-
 typedef	struct s_shape
 {
 	t_point			pos; // position
