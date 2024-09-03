@@ -11,15 +11,6 @@ typedef	struct s_shape
 	enum e_shape	type;
 }	t_shape;
 
-typedef struct s_plane
-{
-	t_shape shape;
-	// orientation
-	int		width;
-	int		height;
-	//int(*hit);
-}	t_plane;
-
 typedef struct s_cylinder
 {
 	t_shape shape;

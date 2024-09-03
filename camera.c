@@ -1,20 +1,26 @@
 
 #include <unistd.h> // close
 #include <stdio.h> // printf
+#include <math.h> // tan
 
+#include "minirt.h"
 #include "camera.h"
 #include "vector.h"
 #include "ray.h"
 #include "image.h"
 #include "list.h"
 
-t_camera	init_camera(t_image image)
+t_camera	init_camera(t_image image, double fov_degree)
 {
 	t_camera camera;
 
+	camera.fov_radian = fov_degree * PI / 180.0;
+
 	camera.focal_length = 1.0;
-	camera.viewport_height = 2.0;
-	camera.viewport_width = camera.viewport_height * ((double)image.width / image.height);
+	// camera.viewport_height = 2.0;
+	// camera.viewport_width = camera.viewport_height * ((double)image.width / image.height);
+	camera.viewport_height = 2.0 * camera.focal_length * tan(camera.fov_radian / 2.0);
+	camera.viewport_width = camera.viewport_height * image.aspect_ratio;
 	camera.center = vec3(0, 0, 0);
 
 	camera.viewport_u = vec3(camera.viewport_width, 0, 0);

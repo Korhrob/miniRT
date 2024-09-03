@@ -5,6 +5,7 @@
 #include "minirt.h"
 #include "list.h"
 #include "sphere.h"
+#include "plane.h"
 #include "image.h"
 #include "camera.h"
 
@@ -27,23 +28,27 @@ void displayProgressBar(int progress, int total) {
 int	main(void)
 {
 	t_image		image = init_image(16.0 / 9.0, 400);
-	t_camera	camera = init_camera(image);
+	t_camera	camera = init_camera(image, 90.0);
 
 	// Object list - fake list for now
 	t_list *list;
-	list = malloc(sizeof(t_list));
-	t_sphere *data = new_sphere(vec3(0, 0, -1), 0.5);
-	list->data = data;
-	list->next = NULL;
-	list->type = SPHERE;
+	t_list *temp;
 
-	t_list *list_temp;
-	list_temp = malloc(sizeof(t_list));
-	t_sphere *data_temp = new_sphere(vec3(0, -100.5, -1), 100);
-	list_temp->data = data_temp;
-	list_temp->next = NULL;
-	list_temp->type = SPHERE;
-	list->next = list_temp;
+	t_sphere *data = new_sphere(vec3(0, 0, -1), 0.5);
+	temp = new_list(data, SPHERE);
+	list_add(&list, temp);
+
+	t_sphere *data_1 = new_sphere(vec3(0, -100.5, -1), 100);
+	temp = new_list(data_1, SPHERE);
+	list_add(&list, temp);
+
+	t_sphere *data_2 = new_sphere(vec3(2.5, 1.5, -2), 0.25);
+	temp = new_list(data_2, SPHERE);
+	list_add(&list, temp);
+
+	//t_plane *data_3 = new_plane(vec3(0, -2, -1), vec3(2, 2, 0), vec3(0.5, 0.5, 0));
+	// temp = new_list(data_3, PLANE);
+	// list_add(&list, temp);
 
 	render(camera, image, list);
 }

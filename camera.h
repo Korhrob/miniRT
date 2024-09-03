@@ -7,6 +7,7 @@
 
 typedef struct s_camera
 {
+	double	fov_radian;
 	double	focal_length;
 	double	viewport_height;
 	double	viewport_width;
@@ -19,7 +20,7 @@ typedef struct s_camera
 	t_vec3	pixel00_loc;
 }	t_camera;
 
-t_camera	init_camera(t_image image);
+t_camera	init_camera(t_image image, double fov_degree);
 void		render(t_camera camera, t_image image, t_list *list);
 
 #endif

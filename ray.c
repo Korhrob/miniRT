@@ -5,6 +5,7 @@
 #include "color.h"
 #include "shape.h"
 #include "sphere.h"
+#include "plane.h"
 #include "list.h"
 #include "range.h"
 #include "hit.h"
@@ -29,17 +30,27 @@ int	ray_hit(t_ray *ray, t_hit *rec, t_range range, t_list *list)
 	while (list != NULL)
 	{
 		// temp conversion to sphere, should check enum type
-		t_sphere *shape = list->data; 
-		if (shape->hit(ray, new_range(range.min, closest), shape, &temp_rec))
+		if (list->type == SPHERE)
 		{
-			hit = TRUE;
-			closest = temp_rec.t;
-			rec->point = temp_rec.point;
-			rec->normal = temp_rec.normal;
-			rec->t = temp_rec.t;
-			rec->front = temp_rec.front;
-			rec->shape = shape;
+			t_sphere *shape = list->data; 
+			if (shape->hit(ray, new_range(range.min, closest), shape, &temp_rec))
+			{
+				hit = TRUE;
+				closest = temp_rec.t;
+				rec->point = temp_rec.point;
+				rec->normal = temp_rec.normal;
+				rec->t = temp_rec.t;
+				rec->front = temp_rec.front;
+				rec->shape = shape;
+			}
 		}
+		else if (list->type == PLANE)
+		{
+			t_plane	*shape = list->data;
+			
+		}
+		// else if (list->type == CYLINDER) {}
+
 		list = list->next;
 	}
 	return hit;

@@ -21,8 +21,12 @@ enum	e_shape
 	CYLINDER
 };
 
-// const double infinity = 1.7976931348623157E+308;
-// const double pi = 3.1415926535897932385;
+#ifndef INFINITY
+# define INFINITY 1.7976931348623157E+308
+#endif
+#ifndef PI
+# define PI 3.1415926535897932385
+#endif
 
 // inline double degrees_to_radians(double degrees)
 // {
