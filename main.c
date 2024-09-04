@@ -8,6 +8,7 @@
 #include "plane.h"
 #include "image.h"
 #include "camera.h"
+#include "scene.h"
 
 void displayProgressBar(int progress, int total) {
     int barWidth = 16;  // Width of the progress bar in characters
@@ -28,7 +29,8 @@ void displayProgressBar(int progress, int total) {
 int	main(void)
 {
 	t_image		image = init_image(16.0 / 9.0, 400);
-	t_camera	camera = init_camera(image, 45.0);
+	t_camera	camera = init_camera(vec3(0,2,5), vec3(0, 0,-1), image, 45.0);
+	t_scene		scene;
 
 	// Object list - fake list for now
 	t_list *list;
@@ -46,9 +48,16 @@ int	main(void)
 	temp = new_list(data_2, SPHERE);
 	list_add(&list, temp);
 
+	scene.objects = list;
+	scene.light.pos = (t_point) { -10, 10, 0 };
+	scene.light.strength = 1;
+
+	scene.ambient.color = (t_color) { 1, 1, 1 };
+	scene.ambient.strength = 0.5;
+
 	//t_plane *data_3 = new_plane(vec3(0, -2, -1), vec3(2, 2, 0), vec3(0.5, 0.5, 0));
 	// temp = new_list(data_3, PLANE);
 	// list_add(&list, temp);
 
-	render(camera, image, list);
+	render(camera, image, &scene);
 }

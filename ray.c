@@ -11,6 +11,30 @@
 #include "range.h"
 #include "hit.h"
 #include "light.h"
+#include "scene.h"
+
+static double	max(double a, double b)
+{
+	if (a > b)
+		return (a);
+	return (b);
+}
+
+static double	step(double val, double step)
+{
+	if (val > step)
+		return (1);
+	return (0);
+}
+
+static double smoothstep(double val, t_range range)
+{
+	if (val > range.min)
+	{
+		// 
+	}
+	return (0);
+}
 
 t_point at(t_ray *ray, double t)
 {
@@ -20,15 +44,16 @@ t_point at(t_ray *ray, double t)
 	return (vv_sum(origin, dir));
 }
 
-int	ray_hit(t_ray *ray, t_hit *rec, t_range range, t_list *list)
+int	ray_hit(t_ray *ray, t_hit *rec, t_range range, t_scene *scene)
 {
+	t_list	*list;
 	t_hit	temp_rec;
 	int		hit = FALSE;
 	double	closest = range.max;
 
+	list = scene->objects;
 	while (list != NULL)
 	{
-		// temp conversion to sphere, should check enum type
 		if (list->type == SPHERE)
 		{
 			t_sphere *shape = list->data; 
@@ -55,13 +80,16 @@ int	ray_hit(t_ray *ray, t_hit *rec, t_range range, t_list *list)
 	return hit;
 }
 
-t_color	ray_color(t_ray *ray, t_list *list)
+t_color	ray_color(t_ray *ray, t_scene *scene)
 {
 	t_hit		rec;
 
-	if (ray_hit(ray, &rec, new_range(0, INFINITY), list))
+	if (ray_hit(ray, &rec, new_range(0, INFINITY), scene))
 	{
-		// t_color	color = vv_sum(rec.normal, vec3(1, 1, 1)); // normals as color
+		// move to lighting calculation
+
+		// normal to color
+		// t_color	color = vv_sum(rec.normal, vec3(1, 1, 1));
 		// return v_mul(color, 0.5);
 
 		// surface color
@@ -69,19 +97,34 @@ t_color	ray_color(t_ray *ray, t_list *list)
 		t_color	color = shape->color;
 
 		// ambient light
-		t_ambient	ambient;
+		t_color	ambient;
+		ambient = vv_mul(color, scene->ambient.color);
+		ambient = v_mul(ambient, scene->ambient.strength);
 
-		color = vv_mul(color, vec3(1,1,1)); // ambient light color
-		color = v_mul(color, 0.5); // ambient light strength
+		// point light
+		// light direction L = v_len(Ls - P)
+		// diffuse max(0,vv_dot(normal, L)) * i * color
+		t_color	diffuse;
+		t_vec3	l = unit_vector(vv_sub(scene->light.pos, rec.point));
+		double	i = max(0, vv_dot(rec.normal, l)) * scene->light.strength;
+		diffuse = v_mul(color, i);
 
-		// light
+		// convert to half lambert (extra)
+
+		color = vv_sum(ambient, diffuse);
+
+		// spot (fake specular)
+		//
+		//
+		//
+
+		// shadow
 
 		return (color);
 
 	}
 
-	t_vec3	unit_direction = unit_vector(ray->dir);
-	double	a = 0.5 * (unit_direction.y + 1.0);
+	double	a = 0.5 * (ray->dir.y + 1.0);
 
 	t_color	color_a = { 1.0, 1.0, 1.0 };
 	color_a = v_mul(color_a, 1.0 - a);

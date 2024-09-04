@@ -8,9 +8,9 @@
 #include "vector.h"
 #include "ray.h"
 #include "image.h"
-#include "list.h"
+#include "scene.h"
 
-t_camera	init_camera(t_image image, double fov_degree)
+t_camera	init_camera(t_point look_from, t_point look_at, t_image image, double fov_degree)
 {
 	t_camera camera;
 
@@ -21,7 +21,7 @@ t_camera	init_camera(t_image image, double fov_degree)
 	// camera.viewport_width = camera.viewport_height * ((double)image.width / image.height);
 	camera.viewport_height = 2.0 * camera.focal_length * tan(camera.fov_radian / 2.0);
 	camera.viewport_width = camera.viewport_height * image.aspect_ratio;
-	camera.center = vec3(0, 0, 0);
+	camera.center = vvec3(look_from);
 
 	camera.viewport_u = vec3(camera.viewport_width, 0, 0);
 	camera.viewport_v = vec3(0, -camera.viewport_height, 0);
@@ -38,7 +38,7 @@ t_camera	init_camera(t_image image, double fov_degree)
 	return (camera);
 }
 
-void	render(t_camera camera, t_image image, t_list *list)
+void	render(t_camera camera, t_image image, t_scene *scene)
 {
 	//dprintf(fd, "P3\n%d %d\n255\n", image_width, image_height);
 	printf("rendering...\n");
@@ -51,10 +51,10 @@ void	render(t_camera camera, t_image image, t_list *list)
 			pixel_center = vv_sum(pixel_center, v_mul(camera.pixel_delta_u, x));
 			pixel_center = vv_sum(pixel_center, v_mul(camera.pixel_delta_v, y));
 
-			t_vec3	ray_direction = vv_sub(pixel_center, camera.center);
+			t_vec3	ray_direction = unit_vector(vv_sub(pixel_center, camera.center));
 			t_ray	ray = { camera.center, ray_direction };
 
-			write_color(image.fd, ray_color(&ray, list));
+			write_color(image.fd, ray_color(&ray, scene));
 		}
 	}
 	close(image.fd);

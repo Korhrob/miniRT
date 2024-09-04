@@ -7,6 +7,7 @@
 #include "list.h"
 #include "range.h"
 #include "hit.h"
+#include "scene.h"
 
 typedef struct	s_ray
 {
@@ -15,7 +16,7 @@ typedef struct	s_ray
 }	t_ray;
 
 t_point	at(t_ray *ray, double t);
-int		ray_hit(t_ray *ray, t_hit *rec, t_range range, t_list *list);
-t_color	ray_color(t_ray *ray, t_list *list);
+int		ray_hit(t_ray *ray, t_hit *rec, t_range range, t_scene *scene);
+t_color	ray_color(t_ray *ray, t_scene *scene);
 
 #endif
