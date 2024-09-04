@@ -21,5 +21,6 @@ t_vec3	vv_sub(t_vec3 a, t_vec3 b);
 t_vec3	vv_mul(t_vec3 a, t_vec3 b);
 double	vv_dot(t_vec3 a, t_vec3 b);
 t_vec3	unit_vector(t_vec3 v);
+t_vec3	cross(t_vec3 a, t_vec3 b);
 
 #endif

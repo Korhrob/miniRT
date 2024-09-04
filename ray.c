@@ -1,5 +1,6 @@
 #include <math.h>
 #include <stddef.h>
+#include <stdio.h>
 
 #include "ray.h"
 #include "vector.h"
@@ -61,11 +62,66 @@ int	ray_hit(t_ray *ray, t_hit *rec, t_range range, t_scene *scene)
 			{
 				hit = TRUE;
 				closest = temp_rec.t;
-				rec->point = temp_rec.point;
-				rec->normal = temp_rec.normal;
+				//rec->point = temp_rec.point;
+				rec->point.x = temp_rec.point.x;
+				rec->point.y = temp_rec.point.y;
+				rec->point.z = temp_rec.point.z;
+				//rec->normal = temp_rec.normal;
+				rec->normal.x = temp_rec.normal.x;
+				rec->normal.y = temp_rec.normal.y;
+				rec->normal.z = temp_rec.normal.z;
+				// color
+				rec->color.x = shape->shape.color.x;
+				rec->color.y = shape->shape.color.y;
+				rec->color.z = shape->shape.color.z;
 				rec->t = temp_rec.t;
 				rec->front = temp_rec.front;
-				rec->shape = (void *)&shape->shape;
+				rec->shape_id = shape->shape.id;
+			}
+		}
+		else if (list->type == PLANE)
+		{
+			t_plane	*shape = list->data;
+			
+		}
+		// else if (list->type == CYLINDER) {}
+
+		list = list->next;
+	}
+	return hit;
+}
+
+static int	ray_hit_ignore(t_ray *ray, t_hit *rec, t_range range, t_scene *scene, int ignore)
+{
+	t_list	*list;
+	t_hit	temp_rec;
+	int		hit = FALSE;
+	double	closest = range.max;
+
+	list = scene->objects;
+	while (list != NULL)
+	{
+		if (list->type == SPHERE)
+		{
+			t_sphere *shape = list->data;
+			if (shape->hit(ray, new_range(range.min, closest), shape, &temp_rec))
+			{
+				if (shape->shape.id != ignore && temp_rec.front)
+				{
+					hit = TRUE;
+					closest = temp_rec.t;
+					//rec->point = temp_rec.point;
+					rec->point.x = temp_rec.point.x;
+					rec->point.y = temp_rec.point.y;
+					rec->point.z = temp_rec.point.z;
+					//rec->normal = temp_rec.normal;
+					rec->normal.x = temp_rec.normal.x;
+					rec->normal.y = temp_rec.normal.y;
+					rec->normal.z = temp_rec.normal.z;
+					rec->t = temp_rec.t;
+					rec->front = temp_rec.front;
+					rec->shape_id = shape->shape.id;
+				}
 			}
 		}
 		else if (list->type == PLANE)
@@ -93,8 +149,7 @@ t_color	ray_color(t_ray *ray, t_scene *scene)
 		// return v_mul(color, 0.5);
 
 		// surface color
-		t_shape	*shape = (t_shape*)rec.shape;
-		t_color	color = shape->color;
+		t_color	color = vvec3(rec.color);
 
 		// ambient light
 		t_color	ambient;
@@ -113,12 +168,15 @@ t_color	ray_color(t_ray *ray, t_scene *scene)
 
 		color = vv_sum(ambient, diffuse);
 
-		// spot (fake specular)
-		//
-		//
-		//
-
 		// shadow
+		t_vec3	dir = unit_vector(vv_sub(rec.point, scene->light.pos));
+		t_ray	s_ray = { rec.point, l };
+		t_hit	s_rec;
+		double	l_dist = INFINITY; // distance to light
+		if (ray_hit_ignore(&s_ray, &s_rec, new_range(0, l_dist), scene, rec.shape_id)) // rec.front && 
+		{
+			return (ambient);
+		}
 
 		return (color);
 

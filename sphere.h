@@ -11,6 +11,7 @@ typedef struct s_sphere
 {
 	t_shape shape;
 	double	radius;
+	char	*name;
 	int		(*hit)(t_ray *ray, t_range range, struct s_sphere *this, t_hit *rec);
 }	t_sphere;
 

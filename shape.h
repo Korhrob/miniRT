@@ -11,6 +11,7 @@ typedef	struct s_shape
 	t_point			pos; // position
 	enum e_shape	type;
 	t_color			color;
+	int				id;
 }	t_shape;
 
 typedef struct s_generic_shape
