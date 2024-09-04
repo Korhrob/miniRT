@@ -45,7 +45,7 @@ t_point at(t_ray *ray, double t)
 	return (vv_sum(origin, dir));
 }
 
-int	ray_hit(t_ray *ray, t_hit *rec, t_range range, t_scene *scene)
+int	ray_hit(t_ray *ray, t_hit *rec, t_range range, t_scene *scene, int ignore)
 {
 	t_list	*list;
 	t_hit	temp_rec;
@@ -60,64 +60,13 @@ int	ray_hit(t_ray *ray, t_hit *rec, t_range range, t_scene *scene)
 			t_sphere *shape = list->data; 
 			if (shape->hit(ray, new_range(range.min, closest), shape, &temp_rec))
 			{
-				hit = TRUE;
-				closest = temp_rec.t;
-				//rec->point = temp_rec.point;
-				rec->point.x = temp_rec.point.x;
-				rec->point.y = temp_rec.point.y;
-				rec->point.z = temp_rec.point.z;
-				//rec->normal = temp_rec.normal;
-				rec->normal.x = temp_rec.normal.x;
-				rec->normal.y = temp_rec.normal.y;
-				rec->normal.z = temp_rec.normal.z;
-				// color
-				rec->color.x = shape->shape.color.x;
-				rec->color.y = shape->shape.color.y;
-				rec->color.z = shape->shape.color.z;
-				rec->t = temp_rec.t;
-				rec->front = temp_rec.front;
-				rec->shape_id = shape->shape.id;
-			}
-		}
-		else if (list->type == PLANE)
-		{
-			t_plane	*shape = list->data;
-			
-		}
-		// else if (list->type == CYLINDER) {}
-
-		list = list->next;
-	}
-	return hit;
-}
-
-static int	ray_hit_ignore(t_ray *ray, t_hit *rec, t_range range, t_scene *scene, int ignore)
-{
-	t_list	*list;
-	t_hit	temp_rec;
-	int		hit = FALSE;
-	double	closest = range.max;
-
-	list = scene->objects;
-	while (list != NULL)
-	{
-		if (list->type == SPHERE)
-		{
-			t_sphere *shape = list->data;
-			if (shape->hit(ray, new_range(range.min, closest), shape, &temp_rec))
-			{
-				if (shape->shape.id != ignore && temp_rec.front)
+				if (shape->shape.id != ignore && temp_rec.front) //  
 				{
 					hit = TRUE;
 					closest = temp_rec.t;
-					//rec->point = temp_rec.point;
-					rec->point.x = temp_rec.point.x;
-					rec->point.y = temp_rec.point.y;
-					rec->point.z = temp_rec.point.z;
-					//rec->normal = temp_rec.normal;
-					rec->normal.x = temp_rec.normal.x;
-					rec->normal.y = temp_rec.normal.y;
-					rec->normal.z = temp_rec.normal.z;
+					rec->point = vvec3(temp_rec.point); // maybe dangerous
+					rec->normal = vvec3(temp_rec.normal); // maybe dangerous
+					rec->color = vvec3(shape->shape.color); // maybe dangerous
 					rec->t = temp_rec.t;
 					rec->front = temp_rec.front;
 					rec->shape_id = shape->shape.id;
@@ -127,6 +76,20 @@ static int	ray_hit_ignore(t_ray *ray, t_hit *rec, t_range range, t_scene *scene,
 		else if (list->type == PLANE)
 		{
 			t_plane	*shape = list->data;
+			if (shape->hit(ray, new_range(range.min, closest), shape, &temp_rec))
+			{
+				if (shape->shape.id != ignore) //   && temp_rec.front
+				{
+					hit = TRUE;
+					closest = temp_rec.t;
+					rec->point = vvec3(temp_rec.point); // maybe dangerous
+					rec->normal = vvec3(temp_rec.normal); // maybe dangerous
+					rec->color = vvec3(shape->shape.color); // maybe dangerous
+					rec->t = temp_rec.t;
+					rec->front = temp_rec.front;
+					rec->shape_id = shape->shape.id;
+				}
+			}
 			
 		}
 		// else if (list->type == CYLINDER) {}
@@ -140,7 +103,7 @@ t_color	ray_color(t_ray *ray, t_scene *scene)
 {
 	t_hit		rec;
 
-	if (ray_hit(ray, &rec, new_range(0, INFINITY), scene))
+	if (ray_hit(ray, &rec, new_range(0, INFINITY), scene, -1))
 	{
 		// move to lighting calculation
 
@@ -157,14 +120,10 @@ t_color	ray_color(t_ray *ray, t_scene *scene)
 		ambient = v_mul(ambient, scene->ambient.strength);
 
 		// point light
-		// light direction L = v_len(Ls - P)
-		// diffuse max(0,vv_dot(normal, L)) * i * color
 		t_color	diffuse;
 		t_vec3	l = unit_vector(vv_sub(scene->light.pos, rec.point));
 		double	i = max(0, vv_dot(rec.normal, l)) * scene->light.strength;
 		diffuse = v_mul(color, i);
-
-		// convert to half lambert (extra)
 
 		color = vv_sum(ambient, diffuse);
 
@@ -172,14 +131,11 @@ t_color	ray_color(t_ray *ray, t_scene *scene)
 		t_vec3	dir = unit_vector(vv_sub(rec.point, scene->light.pos));
 		t_ray	s_ray = { rec.point, l };
 		t_hit	s_rec;
-		double	l_dist = INFINITY; // distance to light
-		if (ray_hit_ignore(&s_ray, &s_rec, new_range(0, l_dist), scene, rec.shape_id)) // rec.front && 
-		{
+		double	l_dist = v_len(vv_sub(rec.point, scene->light.pos)); // distance to light
+		if (ray_hit(&s_ray, &s_rec, new_range(0, l_dist), scene, rec.shape_id)) 
 			return (ambient);
-		}
 
 		return (color);
-
 	}
 
 	double	a = 0.5 * (ray->dir.y + 1.0);

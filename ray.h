@@ -16,7 +16,7 @@ typedef struct	s_ray
 }	t_ray;
 
 t_point	at(t_ray *ray, double t);
-int		ray_hit(t_ray *ray, t_hit *rec, t_range range, t_scene *scene);
+int		ray_hit(t_ray *ray, t_hit *rec, t_range range, t_scene *scene, int ignore);
 t_color	ray_color(t_ray *ray, t_scene *scene);
 
 #endif

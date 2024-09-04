@@ -29,45 +29,54 @@ void displayProgressBar(int progress, int total) {
 int	main(void)
 {
 	t_image		image = init_image(16.0 / 9.0, 400);
-	t_camera	camera = init_camera(vec3(0,0,-5), vec3(0, 0, -1), image, 45.0);
+	t_camera	camera = init_camera(vec3(0,0,-7), vec3(0, -2, -1), image, 30.0);
 	t_scene		scene;
 
 	// Object list - fake list for now
 	t_list *list;
 	t_list *temp;
 
-	t_sphere *data = new_sphere(vec3(-0.3, 0, -3), 0.5, vec3(1, 0, 0));
-	data->name = "red";
+	t_sphere *data = new_sphere(vec3(0.5, -0.5, -3), 0.5, vec3(1, 0, 0));
 	data->shape.id = 0;
 	temp = new_list(data, SPHERE);
 	list_add(&list, temp);
 
-	t_sphere *data_1 = new_sphere(vec3(0, -100.5, -3), 95, vec3(0, 1, 0));
-	data_1->name = "green";
+	t_sphere *data_1 = new_sphere(vec3(0, -100.5, -3), 98, vec3(0.5, 0.5, 0.5));
 	data_1->shape.id = 1;
 	temp = new_list(data_1, SPHERE);
 	list_add(&list, temp);
 
-	t_sphere *data_2 = new_sphere(vec3(.3, 0.3, -3), 0.75, vec3(0, 0, 1));
-	data_2->name = "blue";
-	data_2->shape.id = 2;
-	temp = new_list(data_2, SPHERE);
+	// t_sphere *data_2 = new_sphere(vec3(.3, 0.3, -3), 0.075, vec3(0, 0, 1));
+	// data_2->shape.id = 2;
+	// temp = new_list(data_2, SPHERE);
+	// list_add(&list, temp);
+
+	t_plane *data_3 = new_plane(vec3(0, 0, -3), vec3(1, 1, 1), vec3(0, 0, 1), vec3(1, 1, 1));
+	data_3->shape.id = 3;
+	temp = new_list(data_3, PLANE);
 	list_add(&list, temp);
 
-	printf("shape %d %s\n", data->shape.id, data->name);
-	printf("shape %d %s\n", data_1->shape.id, data_1->name);
-	printf("shape %d %s\n", data_2->shape.id, data_2->name);
+	t_plane *data_4 = new_plane(vec3(1, -1, -3), vec3(1, 1, 1), vec3(0, 1, 0), vec3(0, 1, 0));
+	data_4->shape.id = 4;
+	temp = new_list(data_4, PLANE);
+	list_add(&list, temp);
+
+	t_plane *data_5 = new_plane(vec3(-1, -1, -3), vec3(1, 1, 1), vec3(0, 1, 0), vec3(1, 0, 0));
+	data_5->shape.id = 5;
+	temp = new_list(data_5, PLANE);
+	list_add(&list, temp);
+
+	t_plane *data_6 = new_plane(vec3(0, -1.5, -3), vec3(1, 1, 1), vec3(0, 1, 0), vec3(0, 0, 1));
+	data_6->shape.id = 6;
+	temp = new_list(data_6, PLANE);
+	list_add(&list, temp);
 
 	scene.objects = list;
-	scene.light.pos = (t_point) { 0, 10, -3 };
-	scene.light.strength = 2;
+	scene.light.pos = (t_point) { -1, 10, -3 };
+	scene.light.strength = 1;
 
 	scene.ambient.color = (t_color) { 1, 1, 1 };
 	scene.ambient.strength = 0.5;
-
-	//t_plane *data_3 = new_plane(vec3(0, -2, -1), vec3(2, 2, 0), vec3(0.5, 0.5, 0));
-	// temp = new_list(data_3, PLANE);
-	// list_add(&list, temp);
 
 	render(camera, image, &scene);
 }

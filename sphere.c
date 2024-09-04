@@ -51,7 +51,6 @@ t_sphere	*new_sphere(t_point pos, double radius, t_color color)
 	sphere = malloc(sizeof(t_sphere));
 	if (!sphere)
 		return NULL;
-	sphere->shape.type = SPHERE;
 	sphere->shape.pos.x = pos.x;
 	sphere->shape.pos.y = pos.y;
 	sphere->shape.pos.z = pos.z;
