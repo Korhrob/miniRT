@@ -29,7 +29,7 @@ void displayProgressBar(int progress, int total) {
 int	main(void)
 {
 	t_image		image = init_image(16.0 / 9.0, 400);
-	t_camera	camera = init_camera(vec3(0,0,-7), vec3(0, -2, -1), image, 30.0);
+	t_camera	camera = init_camera(vec3(0,0,-7), vec3(0, -2, -1), image, 45.0);
 	t_scene		scene;
 
 	// Object list - fake list for now
@@ -46,11 +46,6 @@ int	main(void)
 	temp = new_list(data_1, SPHERE);
 	list_add(&list, temp);
 
-	// t_sphere *data_2 = new_sphere(vec3(.3, 0.3, -3), 0.075, vec3(0, 0, 1));
-	// data_2->shape.id = 2;
-	// temp = new_list(data_2, SPHERE);
-	// list_add(&list, temp);
-
 	t_plane *data_3 = new_plane(vec3(0, 0, -3), vec3(1, 1, 1), vec3(0, 0, 1), vec3(1, 1, 1));
 	data_3->shape.id = 3;
 	temp = new_list(data_3, PLANE);
@@ -61,22 +56,22 @@ int	main(void)
 	temp = new_list(data_4, PLANE);
 	list_add(&list, temp);
 
-	t_plane *data_5 = new_plane(vec3(-1, -1, -3), vec3(1, 1, 1), vec3(0, 1, 0), vec3(1, 0, 0));
+	t_plane *data_5 = new_plane(vec3(-1, -1, -3), vec3(0.5, 1, 1), vec3(1, 0, 0), vec3(1, 0, 0));
 	data_5->shape.id = 5;
 	temp = new_list(data_5, PLANE);
 	list_add(&list, temp);
 
-	t_plane *data_6 = new_plane(vec3(0, -1.5, -3), vec3(1, 1, 1), vec3(0, 1, 0), vec3(0, 0, 1));
+	t_plane *data_6 = new_plane(vec3(0, -1.5, -3), vec3(0.5, 1, 1), vec3(0, 1, 0), vec3(0, 0, 1));
 	data_6->shape.id = 6;
 	temp = new_list(data_6, PLANE);
 	list_add(&list, temp);
 
 	scene.objects = list;
-	scene.light.pos = (t_point) { -1, 10, -3 };
+	scene.light.pos = (t_point) { 2, 10, -3 };
 	scene.light.strength = 1;
 
 	scene.ambient.color = (t_color) { 1, 1, 1 };
-	scene.ambient.strength = 0.5;
+	scene.ambient.strength = 0.2;
 
 	render(camera, image, &scene);
 }

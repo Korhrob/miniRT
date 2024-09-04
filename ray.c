@@ -60,7 +60,7 @@ int	ray_hit(t_ray *ray, t_hit *rec, t_range range, t_scene *scene, int ignore)
 			t_sphere *shape = list->data; 
 			if (shape->hit(ray, new_range(range.min, closest), shape, &temp_rec))
 			{
-				if (shape->shape.id != ignore && temp_rec.front) //  
+				if (shape->shape.id != ignore && temp_rec.front)
 				{
 					hit = TRUE;
 					closest = temp_rec.t;
@@ -78,7 +78,7 @@ int	ray_hit(t_ray *ray, t_hit *rec, t_range range, t_scene *scene, int ignore)
 			t_plane	*shape = list->data;
 			if (shape->hit(ray, new_range(range.min, closest), shape, &temp_rec))
 			{
-				if (shape->shape.id != ignore) //   && temp_rec.front
+				if (shape->shape.id != ignore) // && temp_rec.front
 				{
 					hit = TRUE;
 					closest = temp_rec.t;

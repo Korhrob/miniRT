@@ -10,6 +10,7 @@ int		hit_plane(t_ray *ray, t_range range, t_plane *this, t_hit *rec)
 	t_vec3	normal = unit_vector(this->orientation);
 	double	denom = vv_dot(normal, ray->dir);
 
+	// 1e-6 epsilon
 	if (fabs(denom) > 1e-6)
 	{
 		t_vec3	oc = vv_sub(this->shape.pos, ray->origin);
