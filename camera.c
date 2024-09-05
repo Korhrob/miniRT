@@ -49,11 +49,10 @@ t_camera	init_camera(t_point look_from, t_point look_at, t_image image, double f
 
 void	render(t_camera camera, t_image image, t_scene *scene)
 {
-	//dprintf(fd, "P3\n%d %d\n255\n", image_width, image_height);
 	printf("rendering...\n");
 	for (int y = 0; y < image.height; y++)
 	{
-		//displayProgressBar(y, image_height);
+		displayProgressBar(y, image.height);
 		for (int x = 0; x < image.width; x++)
 		{
 			t_point	pixel_center = vvec3(camera.pixel00_loc);

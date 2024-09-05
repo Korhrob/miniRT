@@ -18,7 +18,8 @@ enum	e_shape
 {
 	SPHERE,
 	PLANE,
-	CYLINDER
+	CYLINDER,
+	CYLINDER_CAP
 };
 
 #ifndef INFINITY
@@ -27,6 +28,8 @@ enum	e_shape
 #ifndef PI
 # define PI 3.1415926535897932385
 #endif
+
+void displayProgressBar(int progress, int total);
 
 // inline double degrees_to_radians(double degrees)
 // {

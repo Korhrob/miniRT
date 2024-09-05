@@ -2,6 +2,8 @@
 #include <stdlib.h>
 #include <math.h>
 #include "minirt.h"
+#include "vector.h"
+#include "shape.h"
 #include "plane.h"
 #include "color.h"
 
@@ -52,11 +54,8 @@ t_plane	*new_plane(t_point pos, t_vec3 size, t_vec3 orientation, t_color color)
 	plane->shape.pos = vvec3(pos);
 	plane->size = vvec3(size);
 	plane->orientation = unit_vector(orientation);
-	if (fabs(plane->orientation.x) > 0.0)
-		plane->u = cross(plane->orientation, vec3(0, 1, 0));
-	else
-		plane->u = cross(plane->orientation, vec3(1, 0, 0));
-	plane->v = cross(plane->orientation, plane->u);
+	plane->u = unit_vector(get_perpendicular(orientation));
+	plane->v = unit_vector(cross(orientation, plane->u));
 	plane->shape.color = vvec3(color);
 	plane->hit = hit_plane;
 	return plane;

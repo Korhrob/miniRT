@@ -37,6 +37,13 @@ t_vec3	v_div(t_vec3 v, double t)
 {
 	t_vec3	o;
 
+	if (t == 0)
+	{
+		o.x = 0;
+		o.y = 0;
+		o.z = 0;
+		return (o);
+	}
 	o.x = v.x * (1/t);
 	o.y = v.y * (1/t);
 	o.z = v.z * (1/t);
@@ -116,5 +123,15 @@ t_vec3	cross(t_vec3 a, t_vec3 b)
 	o.x = (a.y * b.z - a.z * b.y);
 	o.y = (a.z * b.x - a.x * b.z);
 	o.z = (a.x * b.y - a.y * b.x);
+	return (o);
+}
+
+t_vec3	local(t_vec3 vec, t_vec3 u, t_vec3 v, t_vec3 w)
+{
+	t_vec3	o;
+
+	o.x = vv_dot(vec, u);
+	o.y = vv_dot(vec, v);
+	o.z = vv_dot(vec, w);
 	return (o);
 }

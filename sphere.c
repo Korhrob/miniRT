@@ -51,13 +51,9 @@ t_sphere	*new_sphere(t_point pos, double radius, t_color color)
 	sphere = malloc(sizeof(t_sphere));
 	if (!sphere)
 		return NULL;
-	sphere->shape.pos.x = pos.x;
-	sphere->shape.pos.y = pos.y;
-	sphere->shape.pos.z = pos.z;
+	sphere->shape.pos = vvec3(pos);
 	sphere->radius = radius;
-	sphere->shape.color.x = color.x;
-	sphere->shape.color.y = color.y;
-	sphere->shape.color.z = color.z;
+	sphere->shape.color = vvec3(color);
 	sphere->hit = hit_sphere;
 	return sphere;
 }

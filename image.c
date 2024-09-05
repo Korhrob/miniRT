@@ -28,5 +28,6 @@ t_image	init_image(double aspect_ratio, int width)
 	close(image.fd);
 	image.fd = open("image.ppm", O_WRONLY | O_CREAT | O_APPEND);
 	dprintf(image.fd, "P3\n%d %d\n255\n", image.width, image.height);
+	printf("created file\n");
 	return (image);
 }

@@ -6,6 +6,7 @@
 #include "list.h"
 #include "sphere.h"
 #include "plane.h"
+#include "cylinder.h"
 #include "image.h"
 #include "camera.h"
 #include "scene.h"
@@ -29,45 +30,92 @@ void displayProgressBar(int progress, int total) {
 int	main(void)
 {
 	t_image		image = init_image(16.0 / 9.0, 400);
-	t_camera	camera = init_camera(vec3(0,0,-7), vec3(0, -2, -1), image, 45.0);
+	t_camera	camera = init_camera(vec3(0,0,-8), vec3(0, -1, -1), image, 45.0);
 	t_scene		scene;
 
 	// Object list - fake list for now
-	t_list *list;
-	t_list *temp;
+	t_list *list = 0;
+	t_list *temp = 0;
+	{
+		t_sphere *data;
 
-	t_sphere *data = new_sphere(vec3(0.5, -0.5, -3), 0.5, vec3(1, 0, 0));
-	data->shape.id = 0;
-	temp = new_list(data, SPHERE);
-	list_add(&list, temp);
+		// data = new_sphere(vec3(0, -0.5, -3), 0.5, vec3(1, 0, 0));
+		// data->shape.id = 0;
+		// temp = new_list(data, SPHERE);
+		// list_add(&list, temp);
 
-	t_sphere *data_1 = new_sphere(vec3(0, -100.5, -3), 98, vec3(0.5, 0.5, 0.5));
-	data_1->shape.id = 1;
-	temp = new_list(data_1, SPHERE);
-	list_add(&list, temp);
+		// data = new_sphere(vec3(0, -100.5, -3), 98, vec3(0, 1, 0));
+		// data->shape.id = 1;
+		// temp = new_list(data, SPHERE);
+		// list_add(&list, temp);
+	}
+	{
+		t_plane *data;
 
-	t_plane *data_3 = new_plane(vec3(0, 0, -3), vec3(1, 1, 1), vec3(0, 0, 1), vec3(1, 1, 1));
-	data_3->shape.id = 3;
-	temp = new_list(data_3, PLANE);
-	list_add(&list, temp);
+		data = new_plane(vec3(0, -2, 0), vec3(10, 10, 10), vec3(0, 1, 0), vec3(1, 1, 1));
+		data->shape.id = 2;
+		temp = new_list(data, PLANE);
+		list_add(&list, temp);
 
-	t_plane *data_4 = new_plane(vec3(1, -1, -3), vec3(1, 1, 1), vec3(0, 1, 0), vec3(0, 1, 0));
-	data_4->shape.id = 4;
-	temp = new_list(data_4, PLANE);
-	list_add(&list, temp);
+		// data = new_plane(vec3(0, 0, -3), vec3(1, 1, 1), vec3(0, 0, 1), vec3(0, 1, 0));
+		// data->shape.id = 3;
+		// temp = new_list(data, PLANE);
+		// list_add(&list, temp);
 
-	t_plane *data_5 = new_plane(vec3(-1, -1, -3), vec3(0.5, 1, 1), vec3(1, 0, 0), vec3(1, 0, 0));
-	data_5->shape.id = 5;
-	temp = new_list(data_5, PLANE);
-	list_add(&list, temp);
+		// data = new_plane(vec3(-1, 0, -3), vec3(1, 1, 1), vec3(0, 0, 1), vec3(0, 0, 1));
+		// data->shape.id = 4;
+		// temp = new_list(data, PLANE);
+		// list_add(&list, temp);
 
-	t_plane *data_6 = new_plane(vec3(0, -1.5, -3), vec3(0.5, 1, 1), vec3(0, 1, 0), vec3(0, 0, 1));
-	data_6->shape.id = 6;
-	temp = new_list(data_6, PLANE);
-	list_add(&list, temp);
+		// data = new_plane(vec3(2, -2, -3), vec3(1, 1, 1), vec3(0, -1, 0), vec3(1, 0, 0));
+		// data->shape.id = 5;
+		// temp = new_list(data, PLANE);
+		// list_add(&list, temp);
+	}
+	{
+		t_cylinder	*data;
 
+		data = new_cylinder(vec3(0, -1, -3), 0.5, 1.0, vec3(1, 1, 0), vec3(1, 0, 0));
+		data->shape.id = 6;
+		data->top->shape.id = 6;
+		data->bot->shape.id = 6;
+		temp = new_list(data, CYLINDER);
+		list_add(&list, temp);
+
+		temp = new_list(data->top, CYLINDER_CAP);
+		list_add(&list, temp);
+
+		temp = new_list(data->bot, CYLINDER_CAP);
+		list_add(&list, temp);
+
+		data = new_cylinder(vec3(2, -1, -3), 0.5, 1.0, vec3(1, 0, 0), vec3(1, 0, 0));
+		data->shape.id = 7;
+		data->top->shape.id = 7;
+		data->bot->shape.id = 7;
+		temp = new_list(data, CYLINDER);
+		list_add(&list, temp);
+
+		temp = new_list(data->top, CYLINDER_CAP);
+		list_add(&list, temp);
+
+		temp = new_list(data->bot, CYLINDER_CAP);
+		list_add(&list, temp);
+
+		data = new_cylinder(vec3(-2, -1, -3), 0.5, 1.0, vec3(1, 0, 1), vec3(1, 0, 0));
+		data->shape.id = 8;
+		data->top->shape.id = 8;
+		data->bot->shape.id = 8;
+		temp = new_list(data, CYLINDER);
+		list_add(&list, temp);
+
+		temp = new_list(data->top, CYLINDER_CAP);
+		list_add(&list, temp);
+
+		temp = new_list(data->bot, CYLINDER_CAP);
+		list_add(&list, temp);
+	}
 	scene.objects = list;
-	scene.light.pos = (t_point) { 2, 10, -3 };
+	scene.light.pos = (t_point) { 10, 10, -10};
 	scene.light.strength = 1;
 
 	scene.ambient.color = (t_color) { 1, 1, 1 };

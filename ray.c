@@ -7,7 +7,9 @@
 #include "color.h"
 #include "shape.h"
 #include "sphere.h"
+#include "sphere.h"
 #include "plane.h"
+#include "cylinder.h"
 #include "list.h"
 #include "range.h"
 #include "hit.h"
@@ -21,6 +23,7 @@ static double	max(double a, double b)
 	return (b);
 }
 
+// shading
 static double	step(double val, double step)
 {
 	if (val > step)
@@ -28,6 +31,7 @@ static double	step(double val, double step)
 	return (0);
 }
 
+// shading
 static double smoothstep(double val, t_range range)
 {
 	if (val > range.min)
@@ -90,9 +94,43 @@ int	ray_hit(t_ray *ray, t_hit *rec, t_range range, t_scene *scene, int ignore)
 					rec->shape_id = shape->shape.id;
 				}
 			}
-			
 		}
-		// else if (list->type == CYLINDER) {}
+		else if (list->type == CYLINDER)
+		{
+			t_cylinder	*shape = list->data;
+			if (shape->hit(ray, new_range(range.min, closest), shape, &temp_rec))
+			{
+				if (shape->shape.id != ignore) // && temp_rec.front
+				{
+					hit = TRUE;
+					closest = temp_rec.t;
+					rec->point = vvec3(temp_rec.point); // maybe dangerous
+					rec->normal = vvec3(temp_rec.normal); // maybe dangerous
+					rec->color = vvec3(shape->shape.color); // maybe dangerous
+					rec->t = temp_rec.t;
+					rec->front = temp_rec.front;
+					rec->shape_id = shape->shape.id;
+				}
+			}
+		}
+		else if (list->type == CYLINDER_CAP)
+		{
+			t_plane	*shape = list->data;
+			if (shape->hit(ray, new_range(range.min, closest), shape, &temp_rec))
+			{
+				if (shape->shape.id != ignore)
+				{
+					hit = TRUE;
+					closest = temp_rec.t;
+					rec->point = vvec3(temp_rec.point); // maybe dangerous
+					rec->normal = vvec3(temp_rec.normal); // maybe dangerous
+					rec->color = vvec3(shape->shape.color); // maybe dangerous
+					rec->t = temp_rec.t;
+					rec->front = temp_rec.front;
+					rec->shape_id = shape->shape.id;
+				}
+			}
+		}
 
 		list = list->next;
 	}
@@ -132,6 +170,7 @@ t_color	ray_color(t_ray *ray, t_scene *scene)
 		t_ray	s_ray = { rec.point, l };
 		t_hit	s_rec;
 		double	l_dist = v_len(vv_sub(rec.point, scene->light.pos)); // distance to light
+		
 		if (ray_hit(&s_ray, &s_rec, new_range(0, l_dist), scene, rec.shape_id)) 
 			return (ambient);
 

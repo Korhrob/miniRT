@@ -14,6 +14,7 @@ typedef struct s_plane
 	t_vec3	orientation;
 	t_vec3	u;
 	t_vec3	v;
+	double	radius; // for cylinder caps
 	int(*hit)(t_ray *ray, t_range range, struct s_plane *this, t_hit *rec);
 }	t_plane;
 
