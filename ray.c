@@ -23,24 +23,6 @@ static double	max(double a, double b)
 	return (b);
 }
 
-// shading
-static double	step(double val, double step)
-{
-	if (val > step)
-		return (1);
-	return (0);
-}
-
-// shading
-static double smoothstep(double val, t_range range)
-{
-	if (val > range.min)
-	{
-		// 
-	}
-	return (0);
-}
-
 t_point at(t_ray *ray, double t)
 {
 	t_vec3	origin = ray->origin;
@@ -51,87 +33,46 @@ t_point at(t_ray *ray, double t)
 
 int	ray_hit(t_ray *ray, t_hit *rec, t_range range, t_scene *scene, int ignore)
 {
-	t_list	*list;
-	t_hit	temp_rec;
-	int		hit = FALSE;
-	double	closest = range.max;
+	t_shape_type	base;
+	t_list			*list;
+	t_hit			temp_rec;
+	int				hit = FALSE;
+	int				thit;
+	double			closest = range.max;
 
 	list = scene->objects;
 	while (list != NULL)
 	{
+		thit = FALSE;
 		if (list->type == SPHERE)
 		{
-			t_sphere *shape = list->data; 
-			if (shape->hit(ray, new_range(range.min, closest), shape, &temp_rec))
-			{
-				if (shape->shape.id != ignore && temp_rec.front)
-				{
-					hit = TRUE;
-					closest = temp_rec.t;
-					rec->point = vvec3(temp_rec.point); // maybe dangerous
-					rec->normal = vvec3(temp_rec.normal); // maybe dangerous
-					rec->color = vvec3(shape->shape.color); // maybe dangerous
-					rec->t = temp_rec.t;
-					rec->front = temp_rec.front;
-					rec->shape_id = shape->shape.id;
-				}
-			}
+			base.sphere = list->d.sphere;
+			if (base.sphere->hit(ray, new_range(range.min, closest), base.sphere, &temp_rec))
+				thit = (base.sphere->shape.id != ignore && temp_rec.front);
 		}
-		else if (list->type == PLANE)
+		else if (list->type == PLANE || list->type == CYLINDER_CAP)
 		{
-			t_plane	*shape = list->data;
-			if (shape->hit(ray, new_range(range.min, closest), shape, &temp_rec))
-			{
-				if (shape->shape.id != ignore) // && temp_rec.front
-				{
-					hit = TRUE;
-					closest = temp_rec.t;
-					rec->point = vvec3(temp_rec.point); // maybe dangerous
-					rec->normal = vvec3(temp_rec.normal); // maybe dangerous
-					rec->color = vvec3(shape->shape.color); // maybe dangerous
-					rec->t = temp_rec.t;
-					rec->front = temp_rec.front;
-					rec->shape_id = shape->shape.id;
-				}
-			}
+			base.plane = list->d.plane;
+			if (base.plane->hit(ray, new_range(range.min, closest), base.plane, &temp_rec))
+				thit = (base.plane->shape.id != ignore && temp_rec.front);
 		}
 		else if (list->type == CYLINDER)
 		{
-			t_cylinder	*shape = list->data;
-			if (shape->hit(ray, new_range(range.min, closest), shape, &temp_rec))
-			{
-				if (shape->shape.id != ignore) // && temp_rec.front
-				{
-					hit = TRUE;
-					closest = temp_rec.t;
-					rec->point = vvec3(temp_rec.point); // maybe dangerous
-					rec->normal = vvec3(temp_rec.normal); // maybe dangerous
-					rec->color = vvec3(shape->shape.color); // maybe dangerous
-					rec->t = temp_rec.t;
-					rec->front = temp_rec.front;
-					rec->shape_id = shape->shape.id;
-				}
-			}
+			base.cylinder = list->d.cylinder;
+			if (base.cylinder->hit(ray, new_range(range.min, closest), base.cylinder, &temp_rec))
+				thit = (base.cylinder->shape.id != ignore && temp_rec.front);
 		}
-		else if (list->type == CYLINDER_CAP)
+		if (thit)
 		{
-			t_plane	*shape = list->data;
-			if (shape->hit(ray, new_range(range.min, closest), shape, &temp_rec))
-			{
-				if (shape->shape.id != ignore)
-				{
-					hit = TRUE;
-					closest = temp_rec.t;
-					rec->point = vvec3(temp_rec.point); // maybe dangerous
-					rec->normal = vvec3(temp_rec.normal); // maybe dangerous
-					rec->color = vvec3(shape->shape.color); // maybe dangerous
-					rec->t = temp_rec.t;
-					rec->front = temp_rec.front;
-					rec->shape_id = shape->shape.id;
-				}
-			}
+			hit = TRUE;
+			closest = temp_rec.t;
+			rec->point = vvec3(temp_rec.point); // maybe dangerous
+			rec->normal = vvec3(temp_rec.normal); // maybe dangerous
+			rec->color = vvec3(temp_rec.color); // maybe dangerous
+			rec->t = temp_rec.t;
+			rec->front = temp_rec.front;
+			rec->shape_id = temp_rec.shape_id;
 		}
-
 		list = list->next;
 	}
 	return hit;

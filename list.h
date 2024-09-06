@@ -8,16 +8,21 @@
 // #include "plane.h"
 // #include "cylinder.h"
 
+struct s_sphere;
+struct s_plane;
+struct s_cylinder;
+
+typedef union	u_shape {
+	struct s_sphere *sphere;
+	struct s_plane	*plane;
+	struct s_cylinder *cylinder;
+}	t_shape_type;
+
 typedef	struct s_list
 {
-	void			*data;
+	t_shape_type	d;
 	struct s_list	*next;
 	enum e_shape	type;
-	// union { // test
-	// 	t_sphere	sphere;
-	// 	t_plane		plane;
-	// 	t_cylinder	cylinder;
-	// };
 }	t_list;
 
 t_list	*new_list(void *data, enum e_shape shape);

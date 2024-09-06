@@ -10,7 +10,12 @@ t_list	*new_list(void *data, enum e_shape shape)
 	list = malloc(sizeof(t_list));
 	if (!list)
 		return (NULL);
-	list->data = data;
+	if (shape == SPHERE)
+		list->d.sphere = data;
+	else if (shape == PLANE || shape == CYLINDER_CAP)
+		list->d.plane = data;
+	else if (shape == CYLINDER)
+		list->d.cylinder = data;
 	list->type = shape;
 	list->next = NULL;
 	return (list);

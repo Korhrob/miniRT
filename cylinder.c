@@ -50,8 +50,12 @@ int	hit_cylinder(t_ray *ray, t_range range, t_cylinder *this, t_hit *rec)
 
 	rec->normal = unit_vector(normal_vec);
 	rec->front = vv_dot(ray->dir, rec->normal) < 0;
+	
 	if (!rec->front)
 		rec->normal = v_mul(rec->normal, -1);
+
+	rec->color = this->shape.color;
+	rec->shape_id = this->shape.id;
 
 	return (TRUE);
 }
@@ -90,7 +94,7 @@ t_cylinder	*new_cylinder(t_point pos, double radius, double length, t_vec3 orien
 	cylinder->top = new_plane(vv_sum(pos, offset), v_mul(vec3(radius, radius, radius), 2), orientation, color);
 	cylinder->top->radius = radius;
 	cylinder->top->hit = hit_cylinder_cap;
-	cylinder->bot = new_plane(vv_sub(pos, offset), v_mul(vec3(radius, radius, radius), 2), orientation, color);
+	cylinder->bot = new_plane(vv_sub(pos, offset), v_mul(vec3(radius, radius, radius), 2), v_mul(orientation, -1), color);
 	cylinder->bot->radius = radius;
 	cylinder->bot->hit = hit_cylinder_cap;
 

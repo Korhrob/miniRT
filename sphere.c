@@ -41,6 +41,9 @@ int	hit_sphere(t_ray *ray, t_range range, t_sphere *this, t_hit *rec)
 	if (!rec->front)
 		rec->normal = v_mul(rec->normal, -1);
 
+	rec->color = this->shape.color;
+	rec->shape_id = this->shape.id;
+	
 	return TRUE;
 }
 
