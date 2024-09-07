@@ -1,6 +1,7 @@
 MLX42		=	mlx42
 MLX42INC	=	$(MLX42)/include/MLX42.h
 MLX42LIB	=	$(MLX42)/build/libmlx42.a
+LIBFT		=	libft
 CC			=	cc
 CCFLAG		=	-g  # -Wall -Werror -Wextra
 LIBS		=	$(MLX42LIB) -ldl -lglfw -pthread -lm
@@ -11,7 +12,7 @@ OBJ			=	$(SRC:.c=.o)
 NAME		=	miniRT
 INC			=	-Iinc -I$(MLX42INC)
 
-all: mlx42 $(NAME)
+all: mlx42 libft $(NAME)
 
 mlx42clone:
 	if [ ! -d "$(MLX42)" ]; then \
@@ -21,8 +22,10 @@ mlx42clone:
 mlx42: mlx42clone
 	@cmake $(MLX42) -B $(MLX42)/build && make -C $(MLX42)/build -j4 \
 
+libft:
+	
 
-$(NAME): mlx42 $(OBJ)
+$(NAME): mlx42 libft $(OBJ)
 	$(CC) $(OBJ) $(CCFLAG) -o $(NAME) $(LIBS)
 
 %.o: %.c
