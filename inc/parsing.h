@@ -4,9 +4,21 @@
 # include "vector.h"
 # include "color.h"
 
+typedef enum e_id
+{
+	NONE,
+	AMBIENT,
+	CAMERA,
+	LIGHT,
+	SPHERE,
+	PLANE,
+	CYLINDER,
+	ID_MAX
+}	t_id;
+
 typedef struct s_parse
 {
-	char	id;
+	int		id;
 	t_vec3	pos;
 	t_vec3	orien;
 	t_color	color;
@@ -14,8 +26,7 @@ typedef struct s_parse
 	double	v2;
 }	t_parse;
 
-void	skip_spaces(char *line);
-int	check_valid(char *line);
-t_parse	set_info(char *line, t_parse *info);
+int		check_valid(char *line);
+void	set_info(char *line, t_parse *info);
 
 #endif
