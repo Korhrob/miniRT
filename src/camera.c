@@ -83,13 +83,12 @@ void	render(t_camera camera, t_image image, t_scene *scene)
 			t_color	color = ray_color(&ray, scene);
 			write_color(image.fd, color);
 
-
-			int	r = color.x * 255;
-			int	g = color.y * 255;
-			int b = color.z * 255;
+			int	ir = 255.99 * color.x;
+			int	ig = 255.99 * color.y;
+			int ib = 255.99 * color.z;
 			int a = 255;
 
-			int32_t pixel = (r << 24 | g  << 16 | b << 8 | a);
+			int32_t pixel = (ir << 24 | ig  << 16 | ib << 8 | a);
 			mlx_put_pixel(img, x, y, pixel);
 		}
 	}

@@ -48,19 +48,19 @@ int	ray_hit(t_ray *ray, t_hit *rec, t_range range, t_scene *scene, int ignore)
 		{
 			base.sphere = list->d.sphere;
 			if (base.sphere->hit(ray, new_range(range.min, closest), base.sphere, &temp_rec))
-				thit = (base.sphere->shape.id != ignore && temp_rec.front);
+				thit = (base.sphere->shape.id != ignore); //  && temp_rec.front
 		}
 		else if (list->type == PLANE || list->type == CYLINDER_CAP)
 		{
 			base.plane = list->d.plane;
 			if (base.plane->hit(ray, new_range(range.min, closest), base.plane, &temp_rec))
-				thit = (base.plane->shape.id != ignore && temp_rec.front);
+				thit = (base.plane->shape.id != ignore); //  && temp_rec.front
 		}
 		else if (list->type == CYLINDER)
 		{
 			base.cylinder = list->d.cylinder;
 			if (base.cylinder->hit(ray, new_range(range.min, closest), base.cylinder, &temp_rec))
-				thit = (base.cylinder->shape.id != ignore && temp_rec.front);
+				thit = (base.cylinder->shape.id != ignore && temp_rec.front); //  
 		}
 		if (thit)
 		{
@@ -87,8 +87,8 @@ t_color	ray_color(t_ray *ray, t_scene *scene)
 		// move to lighting calculation
 
 		// normal to color
-		t_color	normal = vv_sum(rec.normal, vec3(1, 1, 1));
-		return v_mul(normal, 0.5);
+		// t_color	normal = vv_sum(rec.normal, vec3(1, 1, 1));
+		// return v_mul(normal, 0.5);
 
 		// surface color
 		t_color	color = vvec3(rec.color);
@@ -104,7 +104,7 @@ t_color	ray_color(t_ray *ray, t_scene *scene)
 		double	i = max(0, vv_dot(rec.normal, l)) * scene->light.strength;
 		diffuse = v_mul(color, i);
 
-		color = vv_sum(ambient, diffuse);
+		//color = vv_sum(ambient, diffuse);
 
 		// shadow
 		t_vec3	dir = unit_vector(vv_sub(rec.point, scene->light.pos));
@@ -112,10 +112,14 @@ t_color	ray_color(t_ray *ray, t_scene *scene)
 		t_hit	s_rec;
 		double	l_dist = v_len(vv_sub(rec.point, scene->light.pos)); // distance to light
 		
-		if (ray_hit(&s_ray, &s_rec, new_range(0, l_dist), scene, rec.shape_id)) 
+		if (ray_hit(&s_ray, &s_rec, new_range(0, l_dist), scene, rec.shape_id))
+		{
+			double	i = max(0, vv_dot(rec.normal, l)) * scene->ambient.strength;
+			ambient = v_mul(ambient, i);
 			return (ambient);
+		}
 
-		return (color);
+		return (diffuse);
 	}
 
 	double	a = 0.5 * (ray->dir.y + 1.0);
