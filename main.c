@@ -10,6 +10,8 @@
 #include "image.h"
 #include "camera.h"
 #include "scene.h"
+#include "get_next_line/get_next_line.h"
+#include "parsing.h"
 
 void displayProgressBar(int progress, int total) {
     int barWidth = 16;  // Width of the progress bar in characters
@@ -27,11 +29,34 @@ void displayProgressBar(int progress, int total) {
     fflush(stdout);  // Flush the output buffer to ensure immediate display
 }
 
-int	main(void)
+int	main(int argc, char **argv)
 {
 	t_image		image = init_image(16.0 / 9.0, 400);
 	t_camera	camera = init_camera(vec3(0,2,-6), vec3(0, -2, -1), image, 45.0);
 	t_scene		scene;
+
+	char	*line;
+	int 	fd;
+	t_parse	info;
+	(void)argc;
+	fd = open(argv[1], O_RDONLY);
+	if (fd == -1)
+	{
+		perror("Error opening file");
+		return (1);
+	}
+	line = "";
+	while (line)
+	{
+		line = get_next_line(fd);
+		if (check_valid(line))
+		{
+			info = set_info(line);
+		}
+		printf("%s", line);
+		free(line);
+	}
+	printf("\n");
 
 	// Object list - fake list for now
 	t_list *list = 0;
@@ -96,7 +121,7 @@ int	main(void)
 		temp = new_list(data->bot, CYLINDER_CAP);
 		list_add(&list, temp);
 
-		data = new_cylinder(vec3(-2, -1, 0), 1.0, 1.0, vec3(1, 0, 1), vec3(1, 0, 0));
+		data = new_cylinder(vec3(-2, -1, 0), 1.0, 1.0, vec3(1, 0, 1), vec3(1, 1, 0));
 		data->shape.id = 8;
 		data->top->shape.id = 8;
 		data->bot->shape.id = 8;
