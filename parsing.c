@@ -32,16 +32,17 @@ int	count_form(char *str)
 	return (i);
 }
 
-t_parse	set_info(char *line)
+t_parse	set_info(char *line, t_parse *info)
 {
 	t_parse	info;
 	char	**arr;
 	int		i;
 
+	info = malloc (sizeof(t_parse))
 	i = 0;
 	arr = ft_split(line, ' ');
 	info.id = arr[i];
 	i++;
-	
+
 	return (info);
 }

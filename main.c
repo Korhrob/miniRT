@@ -51,7 +51,7 @@ int	main(int argc, char **argv)
 		line = get_next_line(fd);
 		if (check_valid(line))
 		{
-			info = set_info(line);
+			info = set_info(line, &info);
 		}
 		printf("%s", line);
 		free(line);

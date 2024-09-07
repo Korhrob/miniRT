@@ -16,6 +16,6 @@ typedef struct s_parse
 
 void	skip_spaces(char *line);
 int	check_valid(char *line);
-t_parse	set_info(char *line);
+t_parse	set_info(char *line, t_parse *info);
 
 #endif
