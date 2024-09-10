@@ -16,13 +16,6 @@
 #include "light.h"
 #include "scene.h"
 
-static double	max(double a, double b)
-{
-	if (a > b)
-		return (a);
-	return (b);
-}
-
 t_point at(t_ray *ray, double t)
 {
 	t_vec3	origin = ray->origin;
@@ -84,42 +77,42 @@ t_color	ray_color(t_ray *ray, t_scene *scene)
 
 	if (ray_hit(ray, &rec, new_range(0, INFINITY), scene, -1))
 	{
-		// move to lighting calculation
+		return (calc_light(&rec, scene));
+		// // move to lighting calculation
 
-		// normal to color
-		// t_color	normal = vv_sum(rec.normal, vec3(1, 1, 1));
-		// return v_mul(normal, 0.5);
+		// // normal to color
+		// // t_color	normal = vv_sum(rec.normal, vec3(1, 1, 1));
+		// // return v_mul(normal, 0.5);
 
-		// surface color
-		t_color	color = vvec3(rec.color);
+		// // surface color
+		// t_color	color = vvec3(rec.color);
 
-		// ambient light
-		t_color	ambient;
-		ambient = vv_mul(color, scene->ambient.color);
-		ambient = v_mul(ambient, scene->ambient.strength);
+		// // ambient light
+		// t_color	ambient;
+		// ambient = vv_mul(color, scene->ambient.color);
+		// ambient = v_mul(ambient, scene->ambient.strength);
 
-		// point light
-		t_color	diffuse;
-		t_vec3	l = unit_vector(vv_sub(scene->light.pos, rec.point));
-		double	i = max(0, vv_dot(rec.normal, l)) * scene->light.strength;
-		diffuse = v_mul(color, i);
+		// // point light
+		// t_color	diffuse;
+		// t_vec3	l = unit_vector(vv_sub(scene->light.pos, rec.point));
+		// double	i = max(0, vv_dot(rec.normal, l)) * scene->light.strength;
+		// diffuse = v_mul(color, i);
 
-		//color = vv_sum(ambient, diffuse);
+		// //color = vv_sum(ambient, diffuse);
 
-		// shadow
-		t_vec3	dir = unit_vector(vv_sub(rec.point, scene->light.pos));
-		t_ray	s_ray = { rec.point, l };
-		t_hit	s_rec;
-		double	l_dist = v_len(vv_sub(rec.point, scene->light.pos)); // distance to light
+		// // shadow
+		// t_ray	s_ray = { rec.point, l };
+		// t_hit	s_rec;
+		// double	l_dist = v_len(vv_sub(rec.point, scene->light.pos)); // distance to light
 		
-		if (ray_hit(&s_ray, &s_rec, new_range(0, l_dist), scene, rec.shape_id))
-		{
-			double	i = max(0, vv_dot(rec.normal, l)) * scene->ambient.strength;
-			ambient = v_mul(ambient, i);
-			return (ambient);
-		}
+		// if (ray_hit(&s_ray, &s_rec, new_range(0, l_dist), scene, rec.shape_id))
+		// {
+		// 	double	i = max(0, vv_dot(rec.normal, l)) * scene->ambient.strength;
+		// 	ambient = v_mul(ambient, i);
+		// 	return (ambient);
+		// }
 
-		return (diffuse);
+		// return (diffuse);
 	}
 
 	double	a = 0.5 * (ray->dir.y + 1.0);

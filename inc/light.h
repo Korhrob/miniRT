@@ -3,20 +3,9 @@
 
 #include "vector.h"
 #include "color.h"
+#include "scene.h"
+#include "hit.h"
 
-typedef struct s_light
-{
-	t_point	pos;
-	// direction
-	double	strength;
-	t_color	color;
-}	t_light;
-
-typedef struct s_ambient
-{
-	double	strength;
-	t_color	color;
-}	t_ambient;
-
+t_color	calc_light(t_hit *rec, t_scene *scene);
 
 #endif
