@@ -57,7 +57,7 @@ int	main(void)
 		temp = new_list(data, PLANE);
 		list_add(&list, temp);
 
-		data = new_plane(vec3(4, 4, 0), vec3(5, 10, 10), vec3(0, 1, 0), vec3(0, 0, 1));
+		data = new_plane(vec3(6, 4, 0), vec3(5, 10, 10), vec3(0, 1, 0), vec3(0, 0, 1));
 		data->shape.id = 4;
 		temp = new_list(data, PLANE);
 		list_add(&list, temp);
@@ -110,11 +110,11 @@ int	main(void)
 		list_add(&list, temp);
 	}
 	scene.objects = list;
-	scene.light.pos = (t_point) { 0, 8, 4 };
+	scene.light.pos = (t_point) { 0, 8, 0 };
 	scene.light.strength = 1;
 
 	scene.ambient.color = (t_color) { 1, 1, 1 };
-	scene.ambient.strength = 0.5;
+	scene.ambient.strength = 0.25;
 
 	render(camera, image, &scene);
 }
