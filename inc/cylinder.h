@@ -8,6 +8,17 @@
 #include "color.h"
 #include "plane.h"
 
+typedef struct s_cl_calc
+{
+	t_vec3	oc;
+	double	a;
+	double	h;
+	double	c;
+	double	discriminant;
+	double	root;
+	double	y;
+}	t_cl_calc;
+
 typedef struct s_cylinder
 {
 	t_shape shape;

@@ -22,6 +22,7 @@ t_camera	init_camera(t_point look_from, t_point look_at, t_image image, double f
 	camera.fov_radian = fov_degree * PI / 180.0;
 
 	//camera.focal_length = 1.0; 
+	// NOTE: check if this should be horizontal fov (currently vertical fov)
 	camera.focal_length = v_len(vv_sub(look_from, look_at));
 	camera.viewport_height = 2.0 * camera.focal_length * tan(camera.fov_radian / 2.0);
 	camera.viewport_width = camera.viewport_height * image.aspect_ratio;
@@ -95,6 +96,7 @@ void	render(t_camera camera, t_image image, t_scene *scene)
 	close(image.fd);
 	printf("\ndone\n");
 
+	// esc hook
 	mlx_loop(mlx);
 	mlx_terminate(mlx);
 }

@@ -10,14 +10,9 @@
 static t_color	calc_ambient(t_hit *rec, t_scene *scene)
 {
 	t_color	ambient;
-	t_vec3	dir;
-	double	i;
 
 	ambient = vv_mul(rec->color, scene->ambient.color);
 	ambient = v_mul(rec->color, scene->ambient.strength);
-	// dir = unit_vector(vv_sub(scene->light.pos, rec->point));
-	// i = max(0, vv_dot(rec->normal, dir)) * scene->ambient.strength;
-	// ambient = v_mul(ambient, i);
 	return (ambient);
 }
 
@@ -29,8 +24,6 @@ static t_color	calc_diffuse(t_hit *rec, t_scene *scene)
 
 	dir = unit_vector(vv_sub(scene->light.pos, rec->point));
 	i = max(0, vv_dot(rec->normal, dir)) * scene->light.strength;
-	// if (i < scene->ambient.strength)
-	// 	i = scene->ambient.strength;
 	diffuse = v_mul(rec->color, i);
 	return (diffuse);
 }

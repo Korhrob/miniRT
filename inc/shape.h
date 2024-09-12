@@ -9,11 +9,11 @@
 
 typedef	struct s_shape
 {
-	t_point			pos; // position
+	t_point			pos;
 	t_color			color;
 	int				id;
 }	t_shape;
 
-t_vec3 get_perpendicular(t_vec3 vec);
+t_vec3	get_perpendicular(t_vec3 vec);
 
 #endif

@@ -24,51 +24,57 @@ t_point at(t_ray *ray, double t)
 	return (vv_sum(origin, dir));
 }
 
+// put range inside t_ray
+static int	iter(t_list *list, t_ray *ray, t_hit *temp_rec, t_range range, int ignore)
+{
+	int		hit;
+
+	hit = FALSE;
+	if (list->type == SPHERE)
+	{
+		if (list->d.sphere->hit(ray, range, list->d.sphere, temp_rec))
+			hit = (list->d.sphere->shape.id != ignore); // && temp_rec.front
+	}
+	else if (list->type == PLANE || list->type == CYLINDER_CAP)
+	{
+		if (list->d.plane->hit(ray, range, list->d.plane, temp_rec))
+			hit = (list->d.plane->shape.id != ignore); // && temp_rec.front
+	}
+	else if (list->type == CYLINDER)
+	{
+		if (list->d.cylinder->hit(ray, range, list->d.cylinder, temp_rec))
+			hit = (list->d.cylinder->shape.id != ignore); // && temp_rec.front
+	}
+	return (hit);
+}
+
 int	ray_hit(t_ray *ray, t_hit *rec, t_range range, t_scene *scene, int ignore)
 {
-	t_shape_type	base;
 	t_list			*list;
 	t_hit			temp_rec;
-	int				hit = FALSE;
-	int				thit;
-	double			closest = range.max;
+	int				hit;
+	double			closest;
 
+	hit = FALSE;
+	closest = range.max;
 	list = scene->objects;
 	while (list != NULL)
 	{
-		thit = FALSE;
-		if (list->type == SPHERE)
-		{
-			base.sphere = list->d.sphere;
-			if (base.sphere->hit(ray, new_range(range.min, closest), base.sphere, &temp_rec))
-				thit = (base.sphere->shape.id != ignore); //  && temp_rec.front
-		}
-		else if (list->type == PLANE || list->type == CYLINDER_CAP)
-		{
-			base.plane = list->d.plane;
-			if (base.plane->hit(ray, new_range(range.min, closest), base.plane, &temp_rec))
-				thit = (base.plane->shape.id != ignore); //  && temp_rec.front
-		}
-		else if (list->type == CYLINDER)
-		{
-			base.cylinder = list->d.cylinder;
-			if (base.cylinder->hit(ray, new_range(range.min, closest), base.cylinder, &temp_rec))
-				thit = (base.cylinder->shape.id != ignore); // && temp_rec.front
-		}
-		if (thit)
+		range = new_range(range.min, closest);
+		if (iter(list, ray, &temp_rec, range, ignore))
 		{
 			hit = TRUE;
 			closest = temp_rec.t;
-			rec->point = vvec3(temp_rec.point); // maybe dangerous
-			rec->normal = vvec3(temp_rec.normal); // maybe dangerous
-			rec->color = vvec3(temp_rec.color); // maybe dangerous
+			rec->point = vvec3(temp_rec.point);
+			rec->normal = vvec3(temp_rec.normal);
+			rec->color = vvec3(temp_rec.color);
 			rec->t = temp_rec.t;
 			rec->front = temp_rec.front;
 			rec->shape_id = temp_rec.shape_id;
 		}
 		list = list->next;
 	}
-	return hit;
+	return (hit);
 }
 
 static t_color	gradient(double a)
@@ -89,5 +95,4 @@ t_color	ray_color(t_ray *ray, t_scene *scene)
 	if (ray_hit(ray, &rec, new_range(0, INFINITY), scene, -1))
 		return (calc_light(&rec, scene));
 	return (gradient(0.5 * (ray->dir.y + 1.0)));
-	//return (vec3(0, 0, 0));
 }

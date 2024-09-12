@@ -7,6 +7,18 @@
 #include "hit.h"
 #include "color.h"
 
+typedef struct s_pl_calc
+{
+	t_vec3	normal;
+	t_vec3	oc;
+	t_vec3	vtp;
+	t_point	p;
+	double	denom;
+	double	t;
+	double	u;
+	double	v;
+}	t_pl_calc;
+
 typedef struct s_plane
 {
 	t_shape shape;

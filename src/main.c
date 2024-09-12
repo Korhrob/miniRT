@@ -39,10 +39,10 @@ int	main(void)
 	{
 		t_sphere *data;
 
-		// data = new_sphere(vec3(0, 4, -7), 20, vec3(1, 0, 0));
-		// data->shape.id = 0;
-		// temp = new_list(data, SPHERE);
-		// list_add(&list, temp);
+		data = new_sphere(vec3(-4.5, -1, 0), 1, vec3(1, 0, 0));
+		data->shape.id = 0;
+		temp = new_list(data, SPHERE);
+		list_add(&list, temp);
 
 		// data = new_sphere(vec3(0, -100.5, -3), 98, vec3(0, 1, 0));
 		// data->shape.id = 1;
