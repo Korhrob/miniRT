@@ -10,9 +10,10 @@ SRC		=	ft_isalpha.c ft_isdigit.c ft_isalnum.c ft_isascii.c ft_isprint.c \
 			ft_printf.c ft_printf_util.c ft_printf_bonus.c \
 			ft_print_chr.c ft_print_hex.c ft_print_nbr.c ft_print_ptr.c ft_print_str.c \
 			get_next_line.c get_next_line_utils.c ft_quote.c \
-			ft_lstnew_bonus.c ft_lstadd_front_bonus.c ft_lstsize_bonus.c ft_lstlast_bonus.c ft_lstadd_back_bonus.c \
-			ft_lstdelone_bonus.c ft_lstclear_bonus.c ft_lstiter_bonus.c ft_lstmap_bonus.c \
-			ft_free.c ft_free_arr.c ft_arr_len.c ft_arr_join.c file_line_count.c ft_strtrim_quote.c
+			ft_free.c ft_free_arr.c ft_arr_len.c ft_arr_join.c file_line_count.c ft_strtrim_quote.c	\
+			ft_strtod.c
+#			ft_lstnew_bonus.c ft_lstadd_front_bonus.c ft_lstsize_bonus.c ft_lstlast_bonus.c ft_lstadd_back_bonus.c \
+			ft_lstdelone_bonus.c ft_lstclear_bonus.c ft_lstiter_bonus.c ft_lstmap_bonus.c
 OBJ		=	$(SRC:.c=.o)
 NAME	=	libft.a
 

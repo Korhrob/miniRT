@@ -14,52 +14,43 @@ int	check_valid(char *line)
 	return (0);
 }
 
-int	count_form(char *str)
-{
-	int i;
-
-	i = 0;
-	while (str)
-	{
-		if (*str == ',')
-			i++;
-		str++;
-	}
-	return (i);
-}
-
 int	set_id(char *str)
 {
-	if (ft_strcmp(str, "A"))
-		return (AMBIENT);
-	else if (ft_strcmp(str, "C"))
-		return (CAMERA);
-	else if (ft_strcmp(str, "L"))
-		return (LIGHT);
-	else if (ft_strcmp(str, "sp"))
-		return (SPHERE);
-	else if (ft_strcmp(str, "pl"))
-		return (PLANE);
-	else if (ft_strcmp(str, "cy"))
-		return (CYLINDER);
+	if (!ft_strcmp(str, "A"))
+		return (ID_AMBIENT);
+	else if (!ft_strcmp(str, "C"))
+		return (ID_CAMERA);
+	else if (!ft_strcmp(str, "L"))
+		return (ID_LIGHT);
+	else if (!ft_strcmp(str, "sp"))
+		return (ID_SPHERE);
+	else if (!ft_strcmp(str, "pl"))
+		return (ID_PLANE);
+	else if (!ft_strcmp(str, "cy"))
+		return (ID_CYLINDER);
 	return (NONE);
 }
 
 void	set_info(char *line, t_parse *info)
 {
 	char	**arr;
-	char	**n_arr;
-	int		i;
 
 	if (!line)
 		return ;
-	i = 0;
 	arr = ft_split(line, ' ');
-	info->id = set_id(arr[i]);
-	i++;
-	n_arr = ft_split(arr[i], ',');
-	info->pos = vec3(ft_atoi(n_arr[0]), ft_atoi(n_arr[1]), ft_atoi(n_arr[2]));
-	i++;
-	n_arr = ft_split(arr[i], ',');
-	info->pos = vec3(ft_atoi(n_arr[0]), ft_atoi(n_arr[1]), ft_atoi(n_arr[2]));
+	// printf("arr0 %s\narr1 %s\narr2 %s\narr3 %s\narr4 %s\n", arr[0], arr[1], arr[2], arr[3], arr[4]);
+	info->id = set_id(arr[0]);
+	if (info->id == ID_AMBIENT)
+		parse_ambient(arr, info);
+	else if (info->id == ID_CAMERA)
+		parse_camera(arr, info);
+	else if (info->id == ID_LIGHT)
+		parse_light(arr, info);
+	else if (info->id == ID_SPHERE)
+		parse_sphere(arr, info);
+	else if (info->id == ID_PLANE)
+		parse_plane(arr, info);
+	else if (info->id == ID_CYLINDER)
+		parse_cylinder(arr, info);
+	ft_free_arr(arr);
 }

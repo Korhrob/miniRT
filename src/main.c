@@ -32,7 +32,8 @@ void displayProgressBar(int progress, int total) {
 int	main(int argc, char **argv)
 {
 	t_image		image = init_image(16.0 / 9.0, 400);
-	t_camera	camera = init_camera(vec3(0,4,-7), vec3(0, -2, -1), image, 45.0);
+	// t_camera	camera = init_camera(vec3(0,4,-7), vec3(0, -2, -1), image, 45.0);
+	t_camera	camera;
 	t_scene		scene;
 
 	char	*line;
@@ -52,13 +53,19 @@ int	main(int argc, char **argv)
 		if (check_valid(line) == 0)
 		{
 			set_info(line, &info);
+			if (info.id == ID_CAMERA)
+				camera = init_camera(info.pos, info.orien, image, info.v1);
+			if (info.id == ID_AMBIENT)
+				init_ambient();
+			if (info.id == ID_LIGHT)
+				init_light();
+			if (info.id == ID_CYLINDER || info.id == ID_PLANE || info.id == ID_SPHERE)
+				init_shape(info);
+			
 		}
-		printf("%s", line);
 		if (line)
 			free(line);
 	}
-	printf("\n");
-	printf("test");
 
 	// Object list - fake list for now
 	t_list *list = 0;
