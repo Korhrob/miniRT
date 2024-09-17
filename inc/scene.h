@@ -1,9 +1,9 @@
 #ifndef SCENE_H
 # define SCENE_H
 
-#include "vector.h"
-#include "list.h"
-#include "color.h"
+# include "vector.h"
+# include "list.h"
+# include "color.h"
 
 typedef struct s_light
 {

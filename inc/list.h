@@ -1,19 +1,19 @@
 #ifndef LIST_H
 # define LIST_H
 
-#include "minirt.h"
+# include "minirt.h"
 
-struct s_sphere;
-struct s_plane;
-struct s_cylinder;
+struct	s_sphere;
+struct	s_plane;
+struct	s_cylinder;
 
-typedef union	u_shape {
-	struct s_sphere 	*sphere;
+typedef union u_shape {
+	struct s_sphere		*sphere;
 	struct s_plane		*plane;
 	struct s_cylinder	*cylinder;
 }	t_shape_type;
 
-typedef	struct s_list
+typedef struct s_list
 {
 	t_shape_type	d;
 	struct s_list	*next;

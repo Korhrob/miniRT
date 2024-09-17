@@ -1,9 +1,9 @@
 #ifndef CAMERA_H
 # define CAMERA_H
 
-#include "vector.h"
-#include "image.h"
-#include "scene.h"
+# include "vector.h"
+# include "image.h"
+# include "scene.h"
 
 typedef struct s_camera
 {
@@ -20,7 +20,7 @@ typedef struct s_camera
 	t_vec3	pixel00_loc;
 }	t_camera;
 
-t_camera	init_camera(t_point look_from, t_point look_at, t_image image, double fov_degree);
+t_camera	init_camera(t_point from, t_point to, t_image image, double fov_d);
 void		render(t_camera camera, t_image image, t_scene *scene);
 
 #endif

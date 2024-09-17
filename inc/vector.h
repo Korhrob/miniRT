@@ -1,14 +1,14 @@
 #ifndef VECTOR_H
 # define VECTOR_H
 
-typedef struct	s_vec3
+typedef struct s_vec3
 {
 	double	x;
 	double	y;
-	double	z;	
+	double	z;
 }	t_vec3;
 
-typedef	t_vec3 t_point;
+typedef t_vec3	t_point;
 
 t_vec3	vec3(double x, double y, double z);
 t_vec3	vvec3(t_vec3 v);

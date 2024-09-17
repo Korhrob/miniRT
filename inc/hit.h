@@ -1,7 +1,7 @@
 #ifndef HIT_H
 # define HIT_H
 
-#include "vector.h"
+# include "vector.h"
 
 typedef struct s_hit_record
 {

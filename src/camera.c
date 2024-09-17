@@ -81,6 +81,7 @@ void	render(t_camera camera, t_image image, t_scene *scene)
 			mlx_put_pixel(img, x, y, pixel);
 		}
 	}
+	printf("\ndone\n");
 	mlx_loop_hook(mlx, esc_hook, mlx);
 	mlx_loop(mlx);
 	mlx_delete_image(mlx, img);

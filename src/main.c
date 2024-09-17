@@ -33,7 +33,7 @@ int	main(void)
 	t_camera	camera = init_camera(vec3(0,5,-15), vec3(0, -2, -1), image, 40.0);
 	t_scene		scene;
 
-	// Object list - fake list for now
+	// Object list
 	t_list *list = 0;
 	t_list *temp = 0;
 	{
@@ -61,11 +61,6 @@ int	main(void)
 		data->shape.id = 4;
 		temp = new_list(data, PLANE);
 		list_add(&list, temp);
-
-		// data = new_plane(vec3(2, -2, -3), vec3(1, 1, 1), vec3(0, -1, 0), vec3(1, 0, 0));
-		// data->shape.id = 5;
-		// temp = new_list(data, PLANE);
-		// list_add(&list, temp);
 	}
 	{
 		t_cylinder	*data;
@@ -118,20 +113,20 @@ int	main(void)
 
 	render(camera, image, &scene);
 
-	// list clean
+	// list_clean
 	temp = list;
-	t_list *next = temp->next;
-	while (next != NULL)
+	t_list *next = list->next;
+	while (temp != NULL)
 	{
-		next = temp;
+		next = temp->next;
+		printf("type %d\n", temp->type);
 		if (temp->type == CYLINDER)
 			free_cylinder(temp->d.cylinder);
 		else if (temp->type == SPHERE)
 			free(temp->d.sphere);
-		else if (temp->type & PLANE | CYLINDER_CAP)
+		else if (temp->type == PLANE)
 			free(temp->d.plane);
 		free(temp);
 		temp = next;
 	}
-	free(temp);
 }

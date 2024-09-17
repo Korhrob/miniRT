@@ -1,7 +1,7 @@
 #ifndef RANGE_H
 # define RANGE_H
 
-typedef struct	s_range
+typedef struct s_range
 {
 	double	min;
 	double	max;

@@ -1,13 +1,13 @@
 #ifndef SHAPE_H
 # define SHAPE_H
 
-#include <math.h>
-#include "minirt.h"
-#include "vector.h"
-#include "ray.h"
-#include "color.h"
+# include <math.h>
+# include "minirt.h"
+# include "vector.h"
+# include "ray.h"
+# include "color.h"
 
-typedef	struct s_shape
+typedef struct s_shape
 {
 	t_point			pos;
 	t_color			color;

@@ -1,11 +1,11 @@
 #ifndef PLANE_H
 # define PLANE_H
 
-#include "shape.h"
-#include "vector.h"
-#include "ray.h"
-#include "hit.h"
-#include "color.h"
+# include "shape.h"
+# include "vector.h"
+# include "ray.h"
+# include "hit.h"
+# include "color.h"
 
 typedef struct s_pl_calc
 {
@@ -19,16 +19,18 @@ typedef struct s_pl_calc
 	double	v;
 }	t_pl_calc;
 
-typedef struct s_plane
+typedef struct s_plane	t_plane;
+
+struct s_plane
 {
-	t_shape shape;
+	t_shape	shape;
 	t_vec3	size;
 	t_vec3	orientation;
 	t_vec3	u;
 	t_vec3	v;
-	double	radius; // for cylinder caps
-	int(*hit)(t_ray *ray, t_range range, struct s_plane *this, t_hit *rec);
-}	t_plane;
+	double	radius;
+	int		(*hit)(t_ray *ray, t_range range, t_plane *this, t_hit *rec);
+};
 
 int		hit_plane(t_ray *ray, t_range range, t_plane *this, t_hit *rec);
 t_plane	*new_plane(t_point pos, t_vec3 size, t_vec3 orientation, t_color color);

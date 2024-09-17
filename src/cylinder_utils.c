@@ -1,4 +1,5 @@
 #include <stdlib.h>
+#include "vector.h"
 #include "cylinder.h"
 
 void	add_caps(t_cylinder *this)

@@ -1,12 +1,12 @@
 #ifndef MINIRT_H
 # define MINIRT_H
 
-#ifndef TRUE
-# define TRUE 1
-#endif
-#ifndef FALSE
-# define FALSE 0
-#endif
+# ifndef TRUE
+#  define TRUE 1
+# endif
+# ifndef FALSE
+#  define FALSE 0
+# endif
 
 enum	e_shape
 {
@@ -16,13 +16,13 @@ enum	e_shape
 	CYLINDER_CAP
 };
 
-#ifndef INFINITY
-# define INFINITY 1.7976931348623157E+308
-#endif
-#ifndef PI
-# define PI 3.1415926535897932385
-#endif
+# ifndef INFINITY
+#  define INFINITY 1.7976931348623157E+308
+# endif
+# ifndef PI
+#  define PI 3.1415926535897932385
+# endif
 
-void displayProgressBar(int progress, int total);
+void	displayProgressBar(int progress, int total); // not required
 
 #endif
