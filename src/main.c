@@ -30,7 +30,7 @@ void displayProgressBar(int progress, int total) {
 int	main(void)
 {
 	t_image		image = init_image(16.0 / 9.0, 800);
-	t_camera	camera = init_camera(vec3(0,4,-7), vec3(0, -2, -1), image, 45.0);
+	t_camera	camera = init_camera(vec3(0,5,-15), vec3(0, -2, -1), image, 30.0);
 	t_scene		scene;
 
 	// Object list - fake list for now
@@ -44,7 +44,7 @@ int	main(void)
 		temp = new_list(data, SPHERE);
 		list_add(&list, temp);
 
-		// data = new_sphere(vec3(0, -100.5, -3), 98, vec3(0, 1, 0));
+		// data = new_sphere(vec3(0, 0, -3), 20, vec3(0, 1, 0));
 		// data->shape.id = 1;
 		// temp = new_list(data, SPHERE);
 		// list_add(&list, temp);
@@ -114,7 +114,7 @@ int	main(void)
 	scene.light.strength = 1;
 
 	scene.ambient.color = (t_color) { 1, 1, 1 };
-	scene.ambient.strength = 0.25;
+	scene.ambient.strength = 0.9;
 
 	render(camera, image, &scene);
 }

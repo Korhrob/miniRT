@@ -2,14 +2,12 @@
 #include <unistd.h> // close
 #include <stdio.h> // printf
 #include <math.h> // tan
-
 #include "minirt.h"
 #include "camera.h"
 #include "vector.h"
 #include "ray.h"
 #include "image.h"
 #include "scene.h"
-
 #include "../mlx42/include/MLX42/MLX42.h"
 
 t_camera	init_camera(t_point look_from, t_point look_at, t_image image, double fov_degree)
@@ -21,11 +19,10 @@ t_camera	init_camera(t_point look_from, t_point look_at, t_image image, double f
 
 	camera.fov_radian = fov_degree * PI / 180.0;
 
-	//camera.focal_length = 1.0; 
-	// NOTE: check if this should be horizontal fov (currently vertical fov)
-	camera.focal_length = v_len(vv_sub(look_from, look_at));
-	camera.viewport_height = 2.0 * camera.focal_length * tan(camera.fov_radian / 2.0);
-	camera.viewport_width = camera.viewport_height * image.aspect_ratio;
+	// NOTE: check if this correctly works as hori2.0 * tan(camera.fov_radian / (2.0 * camera.focal_length));zontal fov (previoudly hfov)
+	camera.focal_length = 1.0; //v_len(vv_sub(look_from, look_at));
+	camera.viewport_width = 2.0 * tan(camera.fov_radian / (2.0 * camera.focal_length));
+	camera.viewport_height = camera.viewport_width * image.aspect_ratio;
 	camera.center = vvec3(look_from);
 
 	w = unit_vector(vv_sub(look_from, look_at));
@@ -96,7 +93,7 @@ void	render(t_camera camera, t_image image, t_scene *scene)
 	close(image.fd);
 	printf("\ndone\n");
 
-	// esc hook
+	// add esc hook
 	mlx_loop(mlx);
 	mlx_terminate(mlx);
 }

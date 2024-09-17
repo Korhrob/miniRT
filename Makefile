@@ -6,7 +6,7 @@ LIBFTINC	=	$(LIBFT)/libft.h
 LIBFTLIB	=	$(LIBFT)/libft.a
 CC			=	cc
 CCFLAG		=	-g  # -Wall -Werror -Wextra
-LIBS		=	$(LIBFTLIB) $(MLX42LIB) -ldl -lglfw -pthread -lm
+LIBS		=	$(LIBFTLIB) $(MLX42LIB) -ldl -lglfw3 -pthread -lm
 SRC			=	src/main.c src/vector.c src/color.c src/image.c src/camera.c \
 				src/range.c src/ray.c src/list.c src/light.c src/utils.c \
 				src/shape.c src/sphere.c src/plane.c src/cylinder.c
@@ -14,14 +14,14 @@ OBJ			=	$(SRC:.c=.o)
 NAME		=	miniRT
 INC			=	-Iinc -I$(MLX42)/include -I$(LIBFT)
 
-all: libft mlx42 $(NAME)
+all: libft $(MLX42LIB) $(NAME)
 
 mlx42clone:
 	if [ ! -d "$(MLX42)" ]; then \
 		git clone https://github.com/codam-coding-college/MLX42.git $(MLX42); \
 	fi
 
-mlx42: mlx42clone
+$(MLX42LIB): mlx42clone
 	@cmake $(MLX42) -B $(MLX42)/build && make -C $(MLX42)/build -j4
 
 $(LIBFTLIB):
