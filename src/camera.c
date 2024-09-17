@@ -19,7 +19,7 @@ t_camera	init_camera(t_point look_from, t_point look_at, t_image image, double f
 
 	camera.fov_radian = fov_degree * PI / 180.0;
 
-	// NOTE: check if this correctly works as hori2.0 * tan(camera.fov_radian / (2.0 * camera.focal_length));zontal fov (previoudly hfov)
+	// NOTE: check if this correctly works as horizontal fov (previoudly hfov)
 	camera.focal_length = 1.0; //v_len(vv_sub(look_from, look_at));
 	camera.viewport_width = 2.0 * tan(camera.fov_radian / (2.0 * camera.focal_length));
 	camera.viewport_height = camera.viewport_width * image.aspect_ratio;
@@ -45,6 +45,13 @@ t_camera	init_camera(t_point look_from, t_point look_at, t_image image, double f
 	camera.pixel00_loc = vv_sum(camera.viewport_ul, v_mul(vv_sum(camera.pixel_delta_u, camera.pixel_delta_v), 0.5));
 
 	return (camera);
+}
+
+static	double	linear_to_gamma(double lin)
+{
+	if (lin > 0)
+		return (sqrt(lin));
+	return (0);
 }
 
 void	render(t_camera camera, t_image image, t_scene *scene)
@@ -81,9 +88,9 @@ void	render(t_camera camera, t_image image, t_scene *scene)
 			t_color	color = ray_color(&ray, scene);
 			write_color(image.fd, color);
 
-			int	ir = 255.99 * color.x;
-			int	ig = 255.99 * color.y;
-			int ib = 255.99 * color.z;
+			int	ir = 255.99 * linear_to_gamma(color.x);
+			int	ig = 255.99 * linear_to_gamma(color.y);
+			int ib = 255.99 * linear_to_gamma(color.z);
 			int a = 255;
 
 			int32_t pixel = (ir << 24 | ig  << 16 | ib << 8 | a);

@@ -44,10 +44,10 @@ int	main(void)
 		temp = new_list(data, SPHERE);
 		list_add(&list, temp);
 
-		// data = new_sphere(vec3(0, 0, -3), 20, vec3(0, 1, 0));
-		// data->shape.id = 1;
-		// temp = new_list(data, SPHERE);
-		// list_add(&list, temp);
+		data = new_sphere(vec3(0, 17, -3), 20, vec3(0, 1, 0));
+		data->shape.id = 1;
+		temp = new_list(data, SPHERE);
+		list_add(&list, temp);
 	}
 	{
 		t_plane *data;
@@ -114,7 +114,7 @@ int	main(void)
 	scene.light.strength = 1;
 
 	scene.ambient.color = (t_color) { 1, 1, 1 };
-	scene.ambient.strength = 0.9;
+	scene.ambient.strength = 0.5;
 
 	render(camera, image, &scene);
 }
