@@ -15,6 +15,7 @@
 #include "hit.h"
 #include "light.h"
 #include "scene.h"
+#include "args.h"
 
 t_point at(t_ray *ray, double t)
 {
@@ -25,12 +26,12 @@ t_point at(t_ray *ray, double t)
 }
 
 // put range inside t_ray
-static int	iter(t_list *list, t_ray *ray, t_hit *temp_rec, t_range range, int ignore)
+static int	iter(t_args *args, t_hit *temp, t_list *this) // t_list *list, t_ray *ray, t_hit *temp_rec, t_range range, int ignore
 {
 	int		hit;
 
 	hit = FALSE;
-	if (list->type == SPHERE)
+	if (args->scene->obj->type == SPHERE)
 	{
 		if (list->d.sphere->hit(ray, range, list->d.sphere, temp_rec))
 			hit = (list->d.sphere->shape.id != ignore); // && temp_rec.front
@@ -48,7 +49,7 @@ static int	iter(t_list *list, t_ray *ray, t_hit *temp_rec, t_range range, int ig
 	return (hit);
 }
 
-int	ray_hit(t_ray *ray, t_hit *rec, t_range range, t_scene *scene, int ignore)
+int	ray_hit(t_args *args) // t_ray *ray, t_hit *rec, t_range range, t_scene *scene, int ignore
 {
 	t_list			*list;
 	t_hit			temp_rec;
@@ -56,21 +57,21 @@ int	ray_hit(t_ray *ray, t_hit *rec, t_range range, t_scene *scene, int ignore)
 	double			closest;
 
 	hit = FALSE;
-	closest = range.max;
-	list = scene->objects;
+	closest = args->range.max;
+	list = args->scene->objects;
 	while (list != NULL)
 	{
-		range = new_range(range.min, closest);
-		if (iter(list, ray, &temp_rec, range, ignore))
+		args->range = new_range(args->range.min, closest);
+		if (iter(args, &temp_rec)) // list, ray, &temp_rec, range, ignore
 		{
 			hit = TRUE;
 			closest = temp_rec.t;
-			rec->point = vvec3(temp_rec.point);
-			rec->normal = vvec3(temp_rec.normal);
-			rec->color = vvec3(temp_rec.color);
-			rec->t = temp_rec.t;
-			rec->front = temp_rec.front;
-			rec->shape_id = temp_rec.shape_id;
+			args->rec->point = vvec3(temp_rec.point);
+			args->rec->normal = vvec3(temp_rec.normal);
+			args->rec->color = vvec3(temp_rec.color);
+			args->rec->t = temp_rec.t;
+			args->rec->front = temp_rec.front;
+			args->rec->shape_id = temp_rec.shape_id;
 		}
 		list = list->next;
 	}
@@ -90,9 +91,19 @@ static t_color	gradient(double a)
 
 t_color	ray_color(t_ray *ray, t_scene *scene)
 {
+	t_args		args;
 	t_hit		rec;
 
-	if (ray_hit(ray, &rec, new_range(0, INFINITY), scene, -1))
+	args.ray = ray;
+	args.scene = scene;
+	args.rec = &rec;
+	args.range = new_range(0, INFINITY);
+	args.ignore_id = -1;
+
+	if (ray_hit(&args)) // ray, &rec, new_range(0, INFINITY), scene, -1
+	{
+
 		return (calc_light(&rec, scene));
+	}
 	return (gradient(0.5 * (ray->dir.y + 1.0)));
 }
