@@ -15,7 +15,6 @@
 #include "hit.h"
 #include "light.h"
 #include "scene.h"
-#include "args.h"
 
 t_point at(t_ray *ray, double t)
 {
@@ -31,20 +30,20 @@ static int	iter(t_args *args, t_hit *temp, t_list *this) // t_list *list, t_ray 
 	int		hit;
 
 	hit = FALSE;
-	if (args->scene->obj->type == SPHERE)
+	if (this->type == SPHERE)
 	{
-		if (list->d.sphere->hit(ray, range, list->d.sphere, temp_rec))
-			hit = (list->d.sphere->shape.id != ignore); // && temp_rec.front
+		if (this->d.sphere->hit(args->ray, args->range, this->d.sphere, temp))
+			hit = (this->d.sphere->shape.id != args->ignore_id); // && temp_rec.front
 	}
-	else if (list->type == PLANE || list->type == CYLINDER_CAP)
+	else if (this->type == PLANE || this->type == CYLINDER_CAP)
 	{
-		if (list->d.plane->hit(ray, range, list->d.plane, temp_rec))
-			hit = (list->d.plane->shape.id != ignore); // && temp_rec.front
+		if (this->d.plane->hit(args->ray, args->range, this->d.plane, temp))
+			hit = (this->d.plane->shape.id != args->ignore_id); // && temp_rec.front
 	}
-	else if (list->type == CYLINDER)
+	else if (this->type == CYLINDER)
 	{
-		if (list->d.cylinder->hit(ray, range, list->d.cylinder, temp_rec))
-			hit = (list->d.cylinder->shape.id != ignore); // && temp_rec.front
+		if (this->d.cylinder->hit(args->ray, args->range, this->d.cylinder, temp))
+			hit = (this->d.cylinder->shape.id != args->ignore_id); // && temp_rec.front
 	}
 	return (hit);
 }
@@ -62,7 +61,7 @@ int	ray_hit(t_args *args) // t_ray *ray, t_hit *rec, t_range range, t_scene *sce
 	while (list != NULL)
 	{
 		args->range = new_range(args->range.min, closest);
-		if (iter(args, &temp_rec)) // list, ray, &temp_rec, range, ignore
+		if (iter(args, &temp_rec, list)) // list, ray, &temp_rec, range, ignore
 		{
 			hit = TRUE;
 			closest = temp_rec.t;
@@ -99,11 +98,7 @@ t_color	ray_color(t_ray *ray, t_scene *scene)
 	args.rec = &rec;
 	args.range = new_range(0, INFINITY);
 	args.ignore_id = -1;
-
 	if (ray_hit(&args)) // ray, &rec, new_range(0, INFINITY), scene, -1
-	{
-
 		return (calc_light(&rec, scene));
-	}
 	return (gradient(0.5 * (ray->dir.y + 1.0)));
 }

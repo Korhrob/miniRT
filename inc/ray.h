@@ -15,8 +15,17 @@ typedef struct	s_ray
 	t_vec3	dir;
 }	t_ray;
 
+typedef struct s_args
+{
+	t_ray	*ray;
+	t_hit	*rec;
+	t_scene	*scene;
+	t_range	range;
+	int		ignore_id;
+}	t_args;
+
 t_point	at(t_ray *ray, double t);
-int		ray_hit(t_ray *ray, t_hit *rec, t_range range, t_scene *scene, int ignore);
+int		ray_hit(t_args *args); // t_ray *ray, t_hit *rec, t_range range, t_scene *scene, int ignore
 t_color	ray_color(t_ray *ray, t_scene *scene);
 
 #endif

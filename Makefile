@@ -12,7 +12,7 @@ SRC			=	src/main.c src/vector.c src/color.c src/image.c src/camera.c \
 				src/shape.c src/sphere.c src/plane.c src/cylinder.c
 OBJ			=	$(SRC:.c=.o)
 NAME		=	miniRT
-INC			=	-Iinc -I$(MLX42INC) -I$(LIBFTINC)
+INC			=	-Iinc -I$(MLX42)/include -I$(LIBFT)
 
 all: libft mlx42 $(NAME)
 

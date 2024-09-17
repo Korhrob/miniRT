@@ -110,6 +110,5 @@ t_cylinder	*new_cylinder(t_point pos, double radius, double length, t_vec3 orien
 		free(cylinder);
 		return (NULL);
 	}
-
 	return (cylinder);
 }
