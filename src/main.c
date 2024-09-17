@@ -29,8 +29,8 @@ void displayProgressBar(int progress, int total) {
 
 int	main(void)
 {
-	t_image		image = init_image(16.0 / 9.0, 800);
-	t_camera	camera = init_camera(vec3(0,5,-15), vec3(0, -2, -1), image, 30.0);
+	t_image		image = init_image(16.0 / 9.0, 1280);
+	t_camera	camera = init_camera(vec3(0,5,-15), vec3(0, -2, -1), image, 40.0);
 	t_scene		scene;
 
 	// Object list - fake list for now
@@ -70,7 +70,7 @@ int	main(void)
 	{
 		t_cylinder	*data;
 
-		data = new_cylinder(vec3(0, -1, 0), 0.5, 1.0, vec3(0, 1, 1), vec3(1, 0, 0));
+		data = new_cylinder(vec3(0, -1, 0), vec3(0.5, 1.0, 0.0), vec3(0, 1, 1), vec3(1, 0, 0));
 		data->shape.id = 6;
 		data->top->shape.id = 6;
 		data->bot->shape.id = 6;
@@ -83,7 +83,7 @@ int	main(void)
 		temp = new_list(data->bot, CYLINDER_CAP);
 		list_add(&list, temp);
 
-		data = new_cylinder(vec3(2, -1, 0), 0.5, 2.0, vec3(0, 1, 0), vec3(1, 0, 0));
+		data = new_cylinder(vec3(2, -1, 0), vec3(0.5, 2.0, 0), vec3(0, 1, 0), vec3(1, 0, 0));
 		data->shape.id = 7;
 		data->top->shape.id = 7;
 		data->bot->shape.id = 7;
@@ -96,7 +96,7 @@ int	main(void)
 		temp = new_list(data->bot, CYLINDER_CAP);
 		list_add(&list, temp);
 
-		data = new_cylinder(vec3(-2, -1, 0), 1.0, 1.0, vec3(1, 0, 1), vec3(1, 0, 0));
+		data = new_cylinder(vec3(-2, -1, 0), vec3(1.0, 1.0, 0.0), vec3(1, 0, 1), vec3(1, 0, 0));
 		data->shape.id = 8;
 		data->top->shape.id = 8;
 		data->bot->shape.id = 8;
@@ -114,7 +114,24 @@ int	main(void)
 	scene.light.strength = 1;
 
 	scene.ambient.color = (t_color) { 1, 1, 1 };
-	scene.ambient.strength = 0.5;
+	scene.ambient.strength = 0.1;
 
 	render(camera, image, &scene);
+
+	// list clean
+	temp = list;
+	t_list *next = temp->next;
+	while (next != NULL)
+	{
+		next = temp;
+		if (temp->type == CYLINDER)
+			free_cylinder(temp->d.cylinder);
+		else if (temp->type == SPHERE)
+			free(temp->d.sphere);
+		else if (temp->type & PLANE | CYLINDER_CAP)
+			free(temp->d.plane);
+		free(temp);
+		temp = next;
+	}
+	free(temp);
 }

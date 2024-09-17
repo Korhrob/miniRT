@@ -2,15 +2,8 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <unistd.h>
+#include <math.h>
 #include "color.h"
-
-void write_color(int fd, t_color color)
-{
-	int	ir = 255.999 * color.x;
-	int	ig = 255.999 * color.y;
-	int ib = 255.999 * color.z;
-	dprintf(fd, "%d %d %d\n", ir, ig, ib);
-}
 
 t_color	color(double r, double g, double b)
 {
@@ -20,4 +13,11 @@ t_color	color(double r, double g, double b)
 	color.y = g;
 	color.z = b;
 	return (color);
+}
+
+double	linear_to_gamma(double lin)
+{
+	if (lin > 0)
+		return (sqrt(lin));
+	return (0);
 }

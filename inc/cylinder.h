@@ -34,6 +34,11 @@ typedef struct s_cylinder
 }	t_cylinder;
 
 int			hit_cylinder(t_ray *ray, t_range range, t_cylinder *this, t_hit *rec);
-t_cylinder	*new_cylinder(t_point pos, double radius, double length, t_vec3 orientation, t_color color);
+int			hit_cylinder_cap(t_ray *ray, t_range range, t_plane *this, t_hit *rec);
+t_cylinder	*new_cylinder(t_point pos, t_vec3 size, t_vec3 orientation, t_color color);
+
+// cylinder_utils
+void		add_caps(t_cylinder *this);
+void		free_cylinder(t_cylinder *this);
 
 #endif

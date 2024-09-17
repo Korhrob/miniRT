@@ -25,7 +25,7 @@ t_point at(t_ray *ray, double t)
 }
 
 // put range inside t_ray
-static int	iter(t_args *args, t_hit *temp, t_list *this) // t_list *list, t_ray *ray, t_hit *temp_rec, t_range range, int ignore
+static int	iter(t_args *args, t_hit *temp, t_list *this)
 {
 	int		hit;
 
@@ -48,7 +48,7 @@ static int	iter(t_args *args, t_hit *temp, t_list *this) // t_list *list, t_ray 
 	return (hit);
 }
 
-int	ray_hit(t_args *args) // t_ray *ray, t_hit *rec, t_range range, t_scene *scene, int ignore
+int	ray_hit(t_args *args)
 {
 	t_list			*list;
 	t_hit			temp_rec;
@@ -61,7 +61,7 @@ int	ray_hit(t_args *args) // t_ray *ray, t_hit *rec, t_range range, t_scene *sce
 	while (list != NULL)
 	{
 		args->range = new_range(args->range.min, closest);
-		if (iter(args, &temp_rec, list)) // list, ray, &temp_rec, range, ignore
+		if (iter(args, &temp_rec, list))
 		{
 			hit = TRUE;
 			closest = temp_rec.t;
@@ -98,7 +98,8 @@ t_color	ray_color(t_ray *ray, t_scene *scene)
 	args.rec = &rec;
 	args.range = new_range(0, INFINITY);
 	args.ignore_id = -1;
-	if (ray_hit(&args)) // ray, &rec, new_range(0, INFINITY), scene, -1
+	if (ray_hit(&args))
 		return (calc_light(&rec, scene));
-	return (gradient(0.5 * (ray->dir.y + 1.0)));
+	//return (gradient(0.5 * (ray->dir.y + 1.0)));
+	return (vec3(0,0,0));
 }

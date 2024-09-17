@@ -76,7 +76,8 @@ int hit_cylinder_cap(t_ray *ray, t_range range, t_plane *this, t_hit *rec)
 	return (FALSE);
 }
 
-t_cylinder	*new_cylinder(t_point pos, double radius, double length, t_vec3 orientation, t_color color)
+// size.x = radius, size.y = length
+t_cylinder	*new_cylinder(t_point pos, t_vec3 size, t_vec3 orientation, t_color color)
 {
 	t_cylinder *cylinder;
 
@@ -84,30 +85,18 @@ t_cylinder	*new_cylinder(t_point pos, double radius, double length, t_vec3 orien
 	if (!cylinder)
 		return (NULL);
 	cylinder->shape.pos = vvec3(pos);
-	cylinder->orientation = vvec3(orientation);
-	cylinder->radius = radius;
-	cylinder->length = length;
 	cylinder->shape.color = vvec3(color);
+	cylinder->orientation = vvec3(orientation);
+	cylinder->radius = size.x;
+	cylinder->length = size.y;
 	cylinder->hit = hit_cylinder;
 	cylinder->u = unit_vector(get_perpendicular(orientation));
 	cylinder->v = unit_vector(cross(orientation, cylinder->u));
 	cylinder->w = cross(cylinder->u, cylinder->v);
-
-	t_vec3 offset = v_mul(unit_vector(orientation), length / 2.0);
-	cylinder->top = new_plane(vv_sum(pos, offset), v_mul(vec3(radius, radius, radius), 2), orientation, color);
-	cylinder->top->radius = radius;
-	cylinder->top->hit = hit_cylinder_cap;
-	cylinder->bot = new_plane(vv_sub(pos, offset), v_mul(vec3(radius, radius, radius), 2), v_mul(orientation, -1), color);
-	cylinder->bot->radius = radius;
-	cylinder->bot->hit = hit_cylinder_cap;
-
+	add_caps(cylinder);
 	if (!cylinder->top || !cylinder->bot)
 	{
-		if (cylinder->top)
-			free(cylinder->top);
-		if (cylinder->bot)
-			free(cylinder->bot);
-		free(cylinder);
+		free_cylinder(cylinder);
 		return (NULL);
 	}
 	return (cylinder);
