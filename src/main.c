@@ -109,7 +109,6 @@ static void handle_info(t_scene *scene, t_camera *camera, t_image *image, int fd
 	t_parse	info;
 	int		id;
 
-	line = "";
 	id = 0;
 	while (line)
 	{

@@ -33,22 +33,25 @@ int	set_id(char *str)
 void	set_info(char *line, t_parse *info)
 {
 	char	**arr;
+	int		error;
 
 	if (!line)
 		return ;
 	arr = ft_split(line, ' ');
 	info->id = set_id(arr[0]);
 	if (info->id == ID_AMBIENT)
-		parse_ambient(arr, info);
+		error = parse_ambient(arr, info);
 	else if (info->id == ID_CAMERA)
-		parse_camera(arr, info);
+		error = parse_camera(arr, info);
 	else if (info->id == ID_LIGHT)
-		parse_light(arr, info);
+		error = parse_light(arr, info);
 	else if (info->id == ID_SPHERE)
-		parse_sphere(arr, info);
+		error = parse_sphere(arr, info);
 	else if (info->id == ID_PLANE)
-		parse_plane(arr, info);
+		error = parse_plane(arr, info);
 	else if (info->id == ID_CYLINDER)
-		parse_cylinder(arr, info);
+		error = parse_cylinder(arr, info);
 	ft_free_arr(arr);
+	// if (error == 1)
+	// 	return (1);
 }

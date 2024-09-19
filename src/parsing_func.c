@@ -21,6 +21,8 @@ int	parse_ambient(char **arr, t_parse *info)
 	info->v1 = ft_strtod(arr[1]);
 	if (create_vector(arr[2], &info->color) == 1)
 		return (1);
+	if (arr[3])
+		return (1);
 	return (0);
 }
 
@@ -31,6 +33,8 @@ int	parse_camera(char **arr, t_parse *info)
 	if (create_vector(arr[2], &info->orien) == 1)
 		return (1);
 	info->v1 = ft_strtod(arr[3]);
+	if (arr[4])
+		return (1);
 	return (0);
 }
 
@@ -40,6 +44,8 @@ int	parse_light(char **arr, t_parse *info)
 		return (1);
 	info->v1 = ft_strtod(arr[2]);
 	if (create_vector(arr[3], &info->color) == 1)
+		return (1);
+	if (arr[4])
 		return (1);
 	return (0);
 }
@@ -51,6 +57,8 @@ int	parse_sphere(char **arr, t_parse *info)
 	info->v1 = ft_strtod(arr[2]);
 	if (create_vector(arr[3], &info->color) == 1)
 		return (1);
+	if (arr[4])
+		return (1);
 	return (0);
 }
 
@@ -61,6 +69,8 @@ int	parse_plane(char **arr, t_parse *info)
 	if (create_vector(arr[2], &info->orien) == 1)
 		return (1);
 	if (create_vector(arr[3], &info->color) == 1)
+		return (1);
+	if (arr[4])
 		return (1);
 	return (0);
 }
@@ -74,6 +84,8 @@ int	parse_cylinder(char **arr, t_parse *info)
 	info->v1 = ft_strtod(arr[3]);
 	info->v2 = ft_strtod(arr[4]);
 	if (create_vector(arr[5], &info->color) == 1)
+		return (1);
+	if (arr[6])
 		return (1);
 	return (0);
 }
