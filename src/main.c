@@ -29,24 +29,86 @@ void displayProgressBar(int progress, int total) {
     fflush(stdout);  // Flush the output buffer to ensure immediate display
 }
 
-int	main(int argc, char **argv)
+static void init_ambient(t_scene *scene, t_parse info)
 {
-	t_image		image = init_image(16.0 / 9.0, 400);
-	// t_camera	camera = init_camera(vec3(0,4,-7), vec3(0, -2, -1), image, 45.0);
-	t_camera	camera;
-	t_scene		scene;
+	scene->ambient.color = info.color;
+	scene->ambient.strength = info.v1;
+}
 
-	char	*line;
-	int 	fd;
-	t_parse	info;
-	(void)argc;
-	fd = open(argv[1], O_RDONLY);
-	if (fd == -1)
+static void init_light(t_scene *scene, t_parse info)
+{
+	scene->light.pos = info.pos;
+	scene->light.strength = info.v1;
+}
+
+static void init_plane(t_list **list, t_parse info, int *id)
+{
+	t_list	*temp;
+	t_plane	*data;
+
+	temp = 0;
+	data = new_plane(info.pos, vec3(10, 10, 10), info.orien, info.color);
+	data->shape.id = *id;
+	temp = new_list(data, PLANE);
+	list_add(list, temp);
+}
+static void init_sphere(t_list **list, t_parse info, int *id)
+{
+	t_list		*temp;
+	t_sphere	*data;
+
+	data = new_sphere(info.pos, info.v1, info.color);
+	data->shape.id = *id;
+	temp = new_list(data, SPHERE);
+	list_add(list, temp);
+}
+
+static void init_cylinder(t_list **list, t_parse info, int *id)
+{
+	t_list		*temp;
+	t_cylinder	*data;
+
+	data = new_cylinder(info.pos, info.v1, info.v2, info.orien, info.color);
+	data->shape.id = *id;
+	data->top->shape.id = *id;
+	data->bot->shape.id = *id;
+	temp = new_list(data, CYLINDER);
+	list_add(list, temp);
+	temp = new_list(data->top, CYLINDER_CAP);
+	list_add(list, temp);
+	temp = new_list(data->bot, CYLINDER_CAP);
+	list_add(list, temp);
+}
+
+static void init_shape(t_list **list, t_parse info, int *id)
+{
+	printf("id = %d\n", *id);
+	if (info.id == ID_PLANE)
 	{
-		perror("Error opening file");
-		return (1);
+		printf("creating plane\n\n");
+		init_plane(list, info, id);
 	}
+	if (info.id == ID_SPHERE)
+	{
+		printf("creating sphere\n\n");
+		init_sphere(list, info, id);
+	}
+	if (info.id == ID_CYLINDER)
+	{
+		printf("creating cylinder\n\n");
+		init_cylinder(list, info, id);
+	}
+	(*id)++;
+}
+
+static void handle_info(t_scene *scene, t_camera *camera, t_image *image, int fd)
+{
+	char	*line;
+	t_parse	info;
+	int		id;
+
 	line = "";
+	id = 0;
 	while (line)
 	{
 		line = get_next_line(fd);
@@ -54,101 +116,41 @@ int	main(int argc, char **argv)
 		{
 			set_info(line, &info);
 			if (info.id == ID_CAMERA)
-				camera = init_camera(info.pos, info.orien, image, info.v1);
+				*camera = init_camera(info.pos, info.orien, *image, info.v1);
 			if (info.id == ID_AMBIENT)
-				init_ambient();
+				init_ambient(scene, info);
 			if (info.id == ID_LIGHT)
-				init_light();
+				init_light(scene, info);
 			if (info.id == ID_CYLINDER || info.id == ID_PLANE || info.id == ID_SPHERE)
-				init_shape(info);
-			
+				init_shape(&scene->objects, info, &id);
 		}
 		if (line)
 			free(line);
 	}
+}
 
-	// Object list - fake list for now
-	t_list *list = 0;
-	t_list *temp = 0;
+int	main(int argc, char **argv)
+{
+	t_image		image;
+	t_camera	camera;
+	t_scene		scene;
+	int 		fd;
+
+	if (argc != 2)
 	{
-		t_sphere *data;
-
-		// data = new_sphere(vec3(0, -0.5, -3), 0.5, vec3(1, 0, 0));
-		// data->shape.id = 0;
-		// temp = new_list(data, SPHERE);
-		// list_add(&list, temp);
-
-		// data = new_sphere(vec3(0, -100.5, -3), 98, vec3(0, 1, 0));
-		// data->shape.id = 1;
-		// temp = new_list(data, SPHERE);
-		// list_add(&list, temp);
+		// error
+		return (1);
 	}
+	image = init_image(16.0 / 9.0, 400);
+	fd = open(argv[1], O_RDONLY);
+	if (fd == -1)
 	{
-		t_plane *data;
-
-		data = new_plane(vec3(0, -2, 0), vec3(10, 10, 10), vec3(0, 1, 0), vec3(1, 1, 1));
-		data->shape.id = 2;
-		temp = new_list(data, PLANE);
-		list_add(&list, temp);
-
-		data = new_plane(vec3(5, 4, 0), vec3(5, 10, 10), vec3(0, 1, 0), vec3(0, 0, 1));
-		data->shape.id = 4;
-		temp = new_list(data, PLANE);
-		list_add(&list, temp);
-
-		// data = new_plane(vec3(2, -2, -3), vec3(1, 1, 1), vec3(0, -1, 0), vec3(1, 0, 0));
-		// data->shape.id = 5;
-		// temp = new_list(data, PLANE);
-		// list_add(&list, temp);
+		perror("Error opening file");
+		return (1);
 	}
-	{
-		t_cylinder	*data;
-
-		data = new_cylinder(vec3(0, -1, 0), 0.5, 1.0, vec3(0, 1, 1), vec3(1, 0, 0));
-		data->shape.id = 6;
-		data->top->shape.id = 6;
-		data->bot->shape.id = 6;
-		temp = new_list(data, CYLINDER);
-		list_add(&list, temp);
-
-		temp = new_list(data->top, CYLINDER_CAP);
-		list_add(&list, temp);
-
-		temp = new_list(data->bot, CYLINDER_CAP);
-		list_add(&list, temp);
-
-		data = new_cylinder(vec3(2, -1, 0), 0.5, 2.0, vec3(0, 1, 0), vec3(1, 0, 0));
-		data->shape.id = 7;
-		data->top->shape.id = 7;
-		data->bot->shape.id = 7;
-		temp = new_list(data, CYLINDER);
-		list_add(&list, temp);
-
-		temp = new_list(data->top, CYLINDER_CAP);
-		list_add(&list, temp);
-
-		temp = new_list(data->bot, CYLINDER_CAP);
-		list_add(&list, temp);
-
-		data = new_cylinder(vec3(-2, -1, 0), 1.0, 1.0, vec3(1, 0, 1), vec3(1, 0, 0));
-		data->shape.id = 8;
-		data->top->shape.id = 8;
-		data->bot->shape.id = 8;
-		temp = new_list(data, CYLINDER);
-		list_add(&list, temp);
-
-		temp = new_list(data->top, CYLINDER_CAP);
-		list_add(&list, temp);
-
-		temp = new_list(data->bot, CYLINDER_CAP);
-		list_add(&list, temp);
-	}
-	scene.objects = list;
-	scene.light.pos = (t_point) { 0, 5, 0 };
-	scene.light.strength = 1;
-
-	scene.ambient.color = (t_color) { 1, 1, 1 };
-	scene.ambient.strength = 0.5;
-
+	scene.objects = 0;
+	handle_info(&scene, &camera, &image, fd);
 	render(camera, image, &scene);
+	close (fd);
+	return (0);
 }

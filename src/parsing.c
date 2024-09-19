@@ -10,7 +10,6 @@ int	check_valid(char *line)
 		line++;
 	if (*line == '\n')
 		return (1);
-	printf("Identifier = [%c%c]", *line, *(line+1));
 	return (0);
 }
 
@@ -38,7 +37,6 @@ void	set_info(char *line, t_parse *info)
 	if (!line)
 		return ;
 	arr = ft_split(line, ' ');
-	// printf("arr0 %s\narr1 %s\narr2 %s\narr3 %s\narr4 %s\n", arr[0], arr[1], arr[2], arr[3], arr[4]);
 	info->id = set_id(arr[0]);
 	if (info->id == ID_AMBIENT)
 		parse_ambient(arr, info);
