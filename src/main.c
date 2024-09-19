@@ -45,9 +45,11 @@ static void init_plane(t_list **list, t_parse info, int *id)
 {
 	t_list	*temp;
 	t_plane	*data;
+	t_vec3	size;
 
+	size = vec3(INFINITY, INFINITY, INFINITY);
 	temp = 0;
-	data = new_plane(info.pos, vec3(10, 10, 10), info.orien, info.color);
+	data = new_plane(info.pos, size, info.orien, info.color);
 	data->shape.id = *id;
 	temp = new_list(data, PLANE);
 	list_add(list, temp);
