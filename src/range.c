@@ -3,7 +3,7 @@
 
 t_range	new_range(double min, double max)
 {
-	t_range range;
+	t_range	range;
 
 	range.min = min;
 	range.max = max;

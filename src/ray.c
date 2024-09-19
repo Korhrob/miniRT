@@ -16,11 +16,13 @@
 #include "light.h"
 #include "scene.h"
 
-t_point at(t_ray *ray, double t)
+t_point	at(t_ray *ray, double t)
 {
-	t_vec3	origin = ray->origin;
-	t_vec3	dir = v_mul(ray->dir, t);
+	t_vec3	origin;
+	t_vec3	dir;
 
+	origin = ray->origin;
+	dir = v_mul(ray->dir, t);
 	return (vv_sum(origin, dir));
 }
 
@@ -33,17 +35,18 @@ static int	iter(t_args *args, t_hit *temp, t_list *this)
 	if (this->type == SPHERE)
 	{
 		if (this->d.sphere->hit(args->ray, args->range, this->d.sphere, temp))
-			hit = (this->d.sphere->shape.id != args->ignore_id); // && temp_rec.front
+			hit = (this->d.sphere->shape.id != args->ignore_id);
 	}
 	else if (this->type == PLANE || this->type == CYLINDER_CAP)
 	{
 		if (this->d.plane->hit(args->ray, args->range, this->d.plane, temp))
-			hit = (this->d.plane->shape.id != args->ignore_id); // && temp_rec.front
+			hit = (this->d.plane->shape.id != args->ignore_id);
 	}
 	else if (this->type == CYLINDER)
 	{
-		if (this->d.cylinder->hit(args->ray, args->range, this->d.cylinder, temp))
-			hit = (this->d.cylinder->shape.id != args->ignore_id); // && temp_rec.front
+		if (this->d.cylinder->hit(
+				args->ray, args->range, this->d.cylinder, temp))
+			hit = (this->d.cylinder->shape.id != args->ignore_id);
 	}
 	return (hit);
 }
@@ -77,21 +80,10 @@ int	ray_hit(t_args *args)
 	return (hit);
 }
 
-static t_color	gradient(double a)
-{
-	t_color	color_a = { 1.0, 1.0, 1.0 };
-	color_a = v_mul(color_a, 1.0 - a);
-
-	t_color	color_b = { 0.5, 0.7, 1.0 };
-	color_b = v_mul(color_b, a);
-
-	return ((t_color)vv_sum(color_a, color_b));
-}
-
 t_color	ray_color(t_ray *ray, t_scene *scene)
 {
-	t_args		args;
-	t_hit		rec;
+	t_args	args;
+	t_hit	rec;
 
 	args.ray = ray;
 	args.scene = scene;
@@ -100,6 +92,5 @@ t_color	ray_color(t_ray *ray, t_scene *scene)
 	args.ignore_id = -1;
 	if (ray_hit(&args))
 		return (calc_light(&rec, scene));
-	//return (gradient(0.5 * (ray->dir.y + 1.0)));
-	return (vec3(0,0,0));
+	return (vec3(0, 0, 0));
 }

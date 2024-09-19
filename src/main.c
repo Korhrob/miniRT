@@ -11,28 +11,13 @@
 #include "camera.h"
 #include "scene.h"
 
-void displayProgressBar(int progress, int total) {
-    int barWidth = 16;  // Width of the progress bar in characters
-    float percentage = (float)(progress + 1) / total;  // Calculate the completion ratio
-    int position = barWidth * percentage;  // Determine the current position on the bar
-
-    // Print the progress bar
-    printf("[");
-    for (int i = 0; i < barWidth; i++) {
-        if (i < position) printf("#");  // Filled portion of the bar
-        else printf(" ");  // Unfilled portion of the bar
-    }
-    printf("] %d%%\r", (int)(percentage * 100));  // Print the percentage complete and carriage return
-
-    fflush(stdout);  // Flush the output buffer to ensure immediate display
-}
-
 int	main(void)
 {
 	t_image		image = init_image(16.0 / 9.0, 1280);
-	t_camera	camera = init_camera(vec3(0,5,-15), vec3(0, -2, -1), image, 40.0);
+	t_camera	camera = init_camera(vec3(0,5,-15), vec3(0, -2, -1), image, 60);
 	t_scene		scene;
 
+	scene.camera = &camera;
 	// Object list
 	t_list *list = 0;
 	t_list *temp = 0;
@@ -108,10 +93,10 @@ int	main(void)
 	scene.light.pos = (t_point) { 0, 8, 0 };
 	scene.light.strength = 1;
 
-	scene.ambient.color = (t_color) { 1, 1, 1 };
+	scene.ambient.color = (t_color) { 1, 0, 0 };
 	scene.ambient.strength = 0.1;
 
-	render(camera, image, &scene);
+	render(image, &scene);
 
 	// list_clean
 	temp = list;
@@ -119,7 +104,7 @@ int	main(void)
 	while (temp != NULL)
 	{
 		next = temp->next;
-		printf("type %d\n", temp->type);
+		//printf("type %d\n", temp->type);
 		if (temp->type == CYLINDER)
 			free_cylinder(temp->d.cylinder);
 		else if (temp->type == SPHERE)

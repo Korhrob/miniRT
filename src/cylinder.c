@@ -1,4 +1,3 @@
-
 #include <stdio.h>
 
 #include <stdlib.h>
@@ -15,9 +14,13 @@
 static void	calc_cylinder(t_ray *ray, t_cylinder *this, t_cl_calc *calc)
 {
 	calc->oc = vv_sub(this->shape.pos, ray->origin);
-    calc->a = v_len_squared(ray->dir) - pow(vv_dot(ray->dir, this->w), 2);
-    calc->h = vv_dot(ray->dir, calc->oc) - vv_dot(ray->dir, this->w) * vv_dot(calc->oc, this->w); 
-    calc->c = vv_dot(calc->oc, calc->oc) - pow(vv_dot(calc->oc, this->w), 2) - (this->radius * this->radius);
+	calc->a = v_len_squared(ray->dir) - pow(vv_dot(ray->dir, this->w), 2);
+	calc->h = vv_dot(ray->dir, calc->oc)
+		- vv_dot(ray->dir, this->w)
+		* vv_dot(calc->oc, this->w);
+	calc->c = vv_dot(calc->oc, calc->oc)
+		- pow(vv_dot(calc->oc, this->w), 2)
+		- pow(this->radius, 2);
 	calc->discriminant = (calc->h * calc->h) - (calc->a * calc->c);
 }
 
@@ -26,7 +29,8 @@ static void	record(t_ray *ray, t_hit *rec, t_cylinder *this, t_cl_calc *calc)
 	t_vec3	projection;
 	t_vec3	normal_vec;
 
-	projection = v_mul(this->w, vv_dot(vv_sub(rec->point, this->shape.pos), this->w));
+	projection = v_mul(this->w,
+			vv_dot(vv_sub(rec->point, this->shape.pos), this->w));
 	normal_vec = vv_sub(vv_sub(rec->point, this->shape.pos), projection);
 	rec->normal = unit_vector(normal_vec);
 	rec->front = vv_dot(ray->dir, rec->normal) < 0;
@@ -41,7 +45,7 @@ int	hit_cylinder(t_ray *ray, t_range range, t_cylinder *this, t_hit *rec)
 	t_cl_calc	calc;
 	double		y;
 
-	calc = (t_cl_calc){ 0 };
+	calc = (t_cl_calc){0};
 	calc_cylinder(ray, this, &calc);
 	if (calc.discriminant < 0)
 		return (FALSE);
@@ -63,7 +67,7 @@ int	hit_cylinder(t_ray *ray, t_range range, t_cylinder *this, t_hit *rec)
 }
 
 // caps are treated as planes, but discarded if they dont fall within the radius
-int hit_cylinder_cap(t_ray *ray, t_range range, t_plane *this, t_hit *rec)
+int	hit_cylinder_cap(t_ray *ray, t_range range, t_plane *this, t_hit *rec)
 {
 	t_vec3	vtp;
 
@@ -77,9 +81,10 @@ int hit_cylinder_cap(t_ray *ray, t_range range, t_plane *this, t_hit *rec)
 }
 
 // size.x = radius, size.y = length
-t_cylinder	*new_cylinder(t_point pos, t_vec3 size, t_vec3 orientation, t_color color)
+t_cylinder	*new_cylinder(t_point pos, t_vec3 size,
+	t_vec3 orientation, t_color color)
 {
-	t_cylinder *cylinder;
+	t_cylinder	*cylinder;
 
 	cylinder = malloc(sizeof(t_cylinder));
 	if (!cylinder)

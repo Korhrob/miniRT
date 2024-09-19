@@ -19,7 +19,7 @@ static void	sphere_calc(t_ray *ray, t_sphere *this, t_sp_calc *calc)
 	calc->discriminant = calc->h * calc->h - calc->a * calc->c;
 }
 
-static void record(t_ray *ray, t_hit *rec, t_sphere *this, t_sp_calc *calc)
+static void	record(t_ray *ray, t_hit *rec, t_sphere *this, t_sp_calc *calc)
 {
 	rec->t = calc->root;
 	rec->point = at(ray, rec->t);
@@ -36,7 +36,7 @@ int	hit_sphere(t_ray *ray, t_range range, t_sphere *this, t_hit *rec)
 {
 	t_sp_calc	calc;
 
-	calc = (t_sp_calc){ 0 };
+	calc = (t_sp_calc){0};
 	sphere_calc(ray, this, &calc);
 	if (calc.discriminant < 0)
 		return (FALSE);

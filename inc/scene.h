@@ -17,6 +17,7 @@ typedef struct s_scene
 	t_light	ambient;
 	t_light	light;
 	t_list	*objects;
+	void	*camera;
 }	t_scene;
 
 #endif

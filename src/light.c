@@ -1,4 +1,3 @@
-
 #include "scene.h"
 #include "light.h"
 #include "vector.h"
@@ -28,7 +27,8 @@ static t_color	calc_diffuse(t_hit *rec, t_scene *scene)
 	return (diffuse);
 }
 
-static t_color	calc_shadow(t_hit *rec, t_scene *scene, t_color ambient, t_color diffuse)
+static t_color	calc_shadow(t_hit *rec, t_scene *scene,
+		t_color ambient, t_color diffuse)
 {
 	t_ray	s_ray;
 	t_hit	s_rec;
@@ -43,7 +43,7 @@ static t_color	calc_shadow(t_hit *rec, t_scene *scene, t_color ambient, t_color 
 	args.ray = &s_ray;
 	s_ray.origin = rec->point;
 	s_ray.dir = unit_vector(vv_sub(scene->light.pos, rec->point));
-	if (ray_hit(&args)) // &s_ray, &s_rec, new_range(0, l_dist), scene, rec->shape_id
+	if (ray_hit(&args))
 		return (ambient);
 	return (diffuse);
 }

@@ -21,6 +21,6 @@ typedef struct s_camera
 }	t_camera;
 
 t_camera	init_camera(t_point from, t_point to, t_image image, double fov_d);
-void		render(t_camera camera, t_image image, t_scene *scene);
+void		render(t_image image, t_scene *scene);
 
 #endif

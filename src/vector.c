@@ -3,7 +3,7 @@
 
 t_vec3	vec3(double x, double y, double z)
 {
-	t_vec3 o;
+	t_vec3	o;
 
 	o.x = x;
 	o.y = y;
@@ -13,7 +13,7 @@ t_vec3	vec3(double x, double y, double z)
 
 t_vec3	vvec3(t_vec3 v)
 {
-	t_vec3 o;
+	t_vec3	o;
 
 	o.x = v.x;
 	o.y = v.y;
@@ -44,9 +44,9 @@ t_vec3	v_div(t_vec3 v, double t)
 		o.z = 0;
 		return (o);
 	}
-	o.x = v.x * (1/t);
-	o.y = v.y * (1/t);
-	o.z = v.z * (1/t);
+	o.x = v.x * (1 / t);
+	o.y = v.y * (1 / t);
+	o.z = v.z * (1 / t);
 	return (o);
 }
 
@@ -57,10 +57,11 @@ double	v_len(t_vec3 v)
 
 double	v_len_squared(t_vec3 v)
 {
-	double len_squared = 
-		(v.x * v.x) + 
-		(v.y * v.y) +
-		(v.z * v.z);
+	double	len_squared;
+
+	len_squared = (v.x * v.x)
+		+ (v.y * v.y)
+		+ (v.z * v.z);
 	return (len_squared);
 }
 
@@ -100,10 +101,11 @@ t_vec3	vv_mul(t_vec3 a, t_vec3 b)
 // (vec3.x * vec3.x) + (vec3.y * vec3.y) + (vec3.z * vec3.z)
 double	vv_dot(t_vec3 a, t_vec3 b)
 {
-	double dot = 
-		(a.x * b.x) + 
-		(a.y * b.y) +
-		(a.z * b.z);
+	double	dot;
+
+	dot = (a.x * b.x)
+		+ (a.y * b.y)
+		+ (a.z * b.z);
 	return (dot);
 }
 

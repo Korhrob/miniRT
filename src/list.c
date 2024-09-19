@@ -5,7 +5,7 @@
 
 t_list	*new_list(void *data, enum e_shape shape)
 {
-	t_list *list;
+	t_list	*list;
 
 	list = malloc(sizeof(t_list));
 	if (!list)
@@ -28,7 +28,7 @@ void	list_add(t_list **list, t_list *element)
 	if (*list == NULL)
 	{
 		*list = element;
-		return;
+		return ;
 	}
 	temp = *list;
 	while (temp->next != NULL)

@@ -7,7 +7,7 @@
 #include "plane.h"
 #include "color.h"
 
-static void calc_plane(t_ray *ray, t_plane *this, t_pl_calc *calc)
+static void	calc_plane(t_ray *ray, t_plane *this, t_pl_calc *calc)
 {
 	calc->normal = unit_vector(this->orientation);
 	calc->denom = vv_dot(calc->normal, ray->dir);
@@ -31,11 +31,11 @@ static	void	record(t_ray *ray, t_plane *this, t_hit *rec, t_pl_calc *calc)
 	rec->shape_id = this->shape.id;
 }
 
-int		hit_plane(t_ray *ray, t_range range, t_plane *this, t_hit *rec)
+int	hit_plane(t_ray *ray, t_range range, t_plane *this, t_hit *rec)
 {
 	t_pl_calc	calc;
 
-	calc = (t_pl_calc){ 0 };
+	calc = (t_pl_calc){0};
 	calc_plane(ray, this, &calc);
 	if (fabs(calc.denom) < 1e-6)
 		return (FALSE);
