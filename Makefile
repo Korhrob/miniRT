@@ -9,10 +9,11 @@ CCFLAG		=	-g  # -Wall -Werror -Wextra
 LIBS		=	$(LIBFTLIB) $(MLX42LIB) -ldl -lglfw -pthread -lm
 SRC			=	src/main.c src/vector.c src/color.c src/image.c src/camera.c \
 				src/range.c src/ray.c src/list.c src/light.c src/utils.c \
-				src/shape.c src/sphere.c src/plane.c src/cylinder.c src/cylinder_utils.c
+				src/shape.c src/sphere.c src/plane.c src/cylinder.c  src/cylinder_utils.c \
+				src/parsing.c src/parsing_func.c
 OBJ			=	$(SRC:.c=.o)
 NAME		=	miniRT
-INC			=	-Iinc -I$(MLX42)/include -I$(LIBFT)
+INC			=	-Iinc -I$(MLX42INC) -I$(LIBFTINC)
 
 all: libft $(MLX42LIB) $(NAME)
 
