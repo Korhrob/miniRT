@@ -15,7 +15,7 @@ OBJ			=	$(SRC:.c=.o)
 NAME		=	miniRT
 INC			=	-Iinc -I$(MLX42INC) -I$(LIBFTINC)
 
-all: libft $(MLX42LIB) $(NAME)
+all: $(LIBFTLIB) $(MLX42LIB) $(NAME)
 
 mlx42clone:
 	if [ ! -d "$(MLX42)" ]; then \
@@ -26,23 +26,23 @@ $(MLX42LIB): mlx42clone
 	@cmake $(MLX42) -B $(MLX42)/build && make -C $(MLX42)/build -j4
 
 $(LIBFTLIB):
-	$(MAKE) -C $(LIBFT)
+	@$(MAKE) -C $(LIBFT) re
 
 $(NAME): $(LIBFTLIB) mlx42 $(OBJ)
 	$(CC) $(OBJ) $(CCFLAG) -o $(NAME) $(LIBS)
 
 %.o: %.c
-	$(CC) $(CCFLAG) $(INC) -c $< -o $@
+	@$(CC) $(CCFLAG) $(INC) -c $< -o $@
 
 clean:
 	rm -f $(OBJ)
-	$(MAKE) -C $(LIBFT) clean
+	@$(MAKE) -C $(LIBFT) clean
 
 fclean: clean
 	rm -f $(NAME)
 	rm -rf $(MLX42)
-	$(MAKE) -C $(LIBFT) fclean
+	@$(MAKE) -C $(LIBFT) fclean
 
-re:	clean all
+re:	fclean all
 
 .PHONY: all clean fclean re
