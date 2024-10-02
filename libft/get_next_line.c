@@ -27,20 +27,15 @@
 void	init_buffer(int fd, struct s_read_buffer *buffer)
 {
 	buffer->start = buffer->index;
-	if (buffer->str != NULL)
+	if (buffer->str[0] != 0)
 		return ;
 	buffer->index = 0;
 	buffer->start = 0;
 	buffer->bytes = 0;
-	buffer->str = ft_calloc(1, BUFFER_SIZE);
-	if (!buffer->str)
-		return ;
+	ft_memset(buffer->str, 0, BUFFER_SIZE);
 	buffer->bytes = read(fd, buffer->str, BUFFER_SIZE);
 	if (buffer->bytes <= 0)
-	{
-		free(buffer->str);
-		buffer->str = NULL;
-	}
+		ft_memset(buffer->str, 0, BUFFER_SIZE);
 }
 
 /*
@@ -54,10 +49,7 @@ void	init_buffer(int fd, struct s_read_buffer *buffer)
 void	*free_buffer(struct s_read_buffer *buffer, char **output)
 {
 	if (buffer->index >= buffer->bytes || buffer->index == -1)
-	{
-		free(buffer->str);
-		buffer->str = NULL;
-	}
+		ft_memset(buffer->str, 0, BUFFER_SIZE);
 	if (output)
 	{
 		free(*output);
@@ -110,7 +102,7 @@ char	*get_next_line(int fd)
 		return (NULL);
 	output = 0;
 	init_buffer(fd, &buffer[fd]);
-	if (buffer[fd].str == NULL)
+	if (buffer[fd].str[0] == 0)
 		return (NULL);
 	output = read_line(fd, &buffer[fd], &output);
 	free_buffer(&buffer[fd], 0);
