@@ -76,9 +76,6 @@ int	set_info(t_parse *info)
 		ft_free_arr(arr);
 	}
 	if (error == 1)
-	{
-		printf("string = [%s]\n", info->original);
 		free(info->original);
-	}
 	return (error);
 }

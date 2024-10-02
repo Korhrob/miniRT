@@ -13,22 +13,6 @@
 #include "../libft/libft.h"
 #include "parsing.h"
 
-void displayProgressBar(int progress, int total) {
-    int barWidth = 16;  // Width of the progress bar in characters
-    float percentage = (float)(progress + 1) / total;  // Calculate the completion ratio
-    int position = barWidth * percentage;  // Determine the current position on the bar
-
-    // Print the progress bar
-    printf("[");
-    for (int i = 0; i < barWidth; i++) {
-        if (i < position) printf("#");  // Filled portion of the bar
-        else printf(" ");  // Unfilled portion of the bar
-    }
-    printf("] %d%%\r", (int)(percentage * 100));  // Print the percentage complete and carriage return
-
-    fflush(stdout);  // Flush the output buffer to ensure immediate display
-}
-
 static void free_shape_list(t_list *list, int fd)
 {
 	t_list *next;
@@ -36,7 +20,6 @@ static void free_shape_list(t_list *list, int fd)
 	while (list != NULL)
 	{
 		next = list->next;
-		//printf("type %d\n", temp->type);
 		if (list->type == CYLINDER)
 			free_cylinder(list->d.cylinder);
 		else if (list->type == SPHERE)
@@ -104,22 +87,12 @@ static void init_cylinder(t_list **list, t_parse info, int *id)
 
 static void init_shape(t_list **list, t_parse info, int *id)
 {
-	printf("id = %d\n", *id);
 	if (info.id == ID_PLANE)
-	{
-		printf("creating plane\n\n");
 		init_plane(list, info, id);
-	}
 	if (info.id == ID_SPHERE)
-	{
-		printf("creating sphere\n\n");
 		init_sphere(list, info, id);
-	}
 	if (info.id == ID_CYLINDER)
-	{
-		printf("creating cylinder\n\n");
 		init_cylinder(list, info, id);
-	}
 	(*id)++;
 }
 
@@ -129,27 +102,41 @@ static int handle_info(t_scene *scene, t_camera *camera, t_image *image, int fd)
 	int		id;
 
 	id = 0;
-	// info.original = "";
-	// while (info.original)
-	// {
+	info.original = "";
+	while (info.original)
+	{
 		info.original = get_next_line(fd);
-		printf("string = [%s]", info.original);
-	// 	if (check_valid(&info))
-	// 	{
-	// 		if (set_info(&info) == 1)
-	// 			return (1);
-	// 		if (info.id == ID_CAMERA)
-	// 			*camera = init_camera(info.pos, info.orien, *image, info.v1);
-	// 		if (info.id == ID_AMBIENT)
-	// 			init_ambient(scene, info);
-	// 		if (info.id == ID_LIGHT)
-	// 			init_light(scene, info);
-	// 		if (info.id == ID_CYLINDER || info.id == ID_PLANE || info.id == ID_SPHERE)
-	// 			init_shape(&scene->objects, info, &id);
-	// 		printf("string = [%s]", info.original);
+		if (check_valid(&info))
+		{
+			if (set_info(&info) == 1)
+				return (1);
+			if (info.id == ID_CAMERA)
+				*camera = init_camera(info.pos, info.orien, *image, info.v1);
+			if (info.id == ID_AMBIENT)
+				init_ambient(scene, info);
+			if (info.id == ID_LIGHT)
+				init_light(scene, info);
+			if (info.id == ID_CYLINDER || info.id == ID_PLANE || info.id == ID_SPHERE)
+				init_shape(&scene->objects, info, &id);
 			free(info.original);
-	// 	}
-	// }
+		}
+	}
+	return (0);
+}
+
+int check_error(int argc, int *fd, char *file)
+{
+	if (argc != 2)
+	{
+		ft_printf("Invalid argument count!!!\n");
+		return (1);
+	}
+	*fd = open(file, O_RDONLY);
+	if (*fd == -1)
+	{
+		perror(file);
+		return (1);
+	}
 	return (0);
 }
 
@@ -160,27 +147,18 @@ int	main(int argc, char **argv)
 	t_scene		scene;
 	int 		fd;
 
-	if (argc != 2)
-	{
-		// error
+	if (check_error(argc, &fd, argv[1]) == 1)
 		return (1);
-	}
 	image = init_image(16.0 / 9.0, 1600);
-	fd = open(argv[1], O_RDONLY);
-	if (fd == -1)
-	{
-		perror("Error opening file");
-		return (1);
-	}
 	scene.objects = 0;
 	if (handle_info(&scene, &camera, &image, fd) == 1)
 	{
-		printf("error\n");
+		printf("Error parsing!!!\n");
 		free_shape_list(scene.objects, fd);
 		return (1);
 	}
 	scene.camera = &camera;
-	// render(image, &scene);
+	render(image, &scene);
 	free_shape_list(scene.objects, fd);
 	return (0);
 }
