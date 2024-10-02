@@ -20,7 +20,7 @@ static void	calc_cylinder(t_ray *ray, t_cylinder *this, t_cl_calc *calc)
 		* vv_dot(calc->oc, this->w);
 	calc->c = vv_dot(calc->oc, calc->oc)
 		- pow(vv_dot(calc->oc, this->w), 2)
-		- pow(this->radius, 2);
+		- this->radius;
 	calc->discriminant = (calc->h * calc->h) - (calc->a * calc->c);
 }
 
@@ -74,7 +74,7 @@ int	hit_cylinder_cap(t_ray *ray, t_range range, t_plane *this, t_hit *rec)
 	if (hit_plane(ray, range, this, rec))
 	{
 		vtp = vv_sub(rec->point, this->shape.pos);
-		if (vv_dot(vtp, vtp) <= (this->radius * this->radius))
+		if (vv_dot(vtp, vtp) <= (this->radius))
 			return (TRUE);
 	}
 	return (FALSE);

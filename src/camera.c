@@ -1,6 +1,4 @@
-#include <unistd.h> // close
-#include <stdio.h> // printf
-#include <math.h> // tan
+#include <math.h>
 #include "minirt.h"
 #include "camera.h"
 #include "vector.h"
@@ -93,7 +91,7 @@ void	render(t_image image, t_scene *scene)
 	if (!img)
 		return ;
 	mlx_set_setting(MLX_STRETCH_IMAGE, true);
-	mlx_image_to_window(mlx, img, 0, 0); // if fail close window, return
+	mlx_image_to_window(mlx, img, 0, 0);
 	y = 0;
 	while (y < image.height)
 	{

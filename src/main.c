@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   main.c                                             :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: avegis <marvin@42.fr>                      +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2024/10/02 18:49:36 by avegis            #+#    #+#             */
+/*   Updated: 2024/10/02 18:49:37 by avegis           ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include <fcntl.h>
 #include <stdio.h>
 #include <stdlib.h>
@@ -13,10 +25,10 @@
 #include "../libft/libft.h"
 #include "parsing.h"
 
-static void free_shape_list(t_list *list, int fd)
+static void	free_shape_list(t_list *list, int fd)
 {
-	t_list *next;
-	
+	t_list	*next;
+
 	while (list != NULL)
 	{
 		next = list->next;
@@ -32,60 +44,7 @@ static void free_shape_list(t_list *list, int fd)
 	close (fd);
 }
 
-static void init_ambient(t_scene *scene, t_parse info)
-{
-	scene->ambient.color = info.color;
-	scene->ambient.strength = info.v1;
-}
-
-static void init_light(t_scene *scene, t_parse info)
-{
-	scene->light.pos = info.pos;
-	scene->light.strength = info.v1;
-}
-
-static void init_plane(t_list **list, t_parse info, int *id)
-{
-	t_list	*temp;
-	t_plane	*data;
-	t_vec3	size;
-
-	size = vec3(INFINITY, INFINITY, INFINITY);
-	temp = 0;
-	data = new_plane(info.pos, size, info.orien, info.color);
-	data->shape.id = *id;
-	temp = new_list(data, PLANE);
-	list_add(list, temp);
-}
-static void init_sphere(t_list **list, t_parse info, int *id)
-{
-	t_list		*temp;
-	t_sphere	*data;
-
-	data = new_sphere(info.pos, info.v1, info.color);
-	data->shape.id = *id;
-	temp = new_list(data, SPHERE);
-	list_add(list, temp);
-}
-
-static void init_cylinder(t_list **list, t_parse info, int *id)
-{
-	t_list		*temp;
-	t_cylinder	*data;
-
-	data = new_cylinder(info.pos, vec3(info.v1, info.v2, 0), info.orien, info.color);
-	data->shape.id = *id;
-	data->top->shape.id = *id;
-	data->bot->shape.id = *id;
-	temp = new_list(data, CYLINDER);
-	list_add(list, temp);
-	temp = new_list(data->top, CYLINDER_CAP);
-	list_add(list, temp);
-	temp = new_list(data->bot, CYLINDER_CAP);
-	list_add(list, temp);
-}
-
-static void init_shape(t_list **list, t_parse info, int *id)
+static void	init_shape(t_list **list, t_parse info, int *id)
 {
 	if (info.id == ID_PLANE)
 		init_plane(list, info, id);
@@ -96,7 +55,8 @@ static void init_shape(t_list **list, t_parse info, int *id)
 	(*id)++;
 }
 
-static int handle_info(t_scene *scene, t_camera *camera, t_image *image, int fd)
+static int	handle_info(t_scene *scene,
+	t_camera *camera, t_image *image, int fd)
 {
 	t_parse	info;
 	int		id;
@@ -116,7 +76,8 @@ static int handle_info(t_scene *scene, t_camera *camera, t_image *image, int fd)
 				init_ambient(scene, info);
 			if (info.id == ID_LIGHT)
 				init_light(scene, info);
-			if (info.id == ID_CYLINDER || info.id == ID_PLANE || info.id == ID_SPHERE)
+			if (info.id == ID_CYLINDER
+				|| info.id == ID_PLANE || info.id == ID_SPHERE)
 				init_shape(&scene->objects, info, &id);
 			free(info.original);
 		}
@@ -124,7 +85,7 @@ static int handle_info(t_scene *scene, t_camera *camera, t_image *image, int fd)
 	return (0);
 }
 
-int check_error(int argc, int *fd, char *file)
+int	check_error(int argc, int *fd, char *file)
 {
 	if (argc != 2)
 	{
@@ -145,7 +106,7 @@ int	main(int argc, char **argv)
 	t_image		image;
 	t_camera	camera;
 	t_scene		scene;
-	int 		fd;
+	int			fd;
 
 	if (check_error(argc, &fd, argv[1]) == 1)
 		return (1);

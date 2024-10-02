@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   parsing.c                                          :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: avegis <marvin@42.fr>                      +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2024/10/02 18:39:56 by avegis            #+#    #+#             */
+/*   Updated: 2024/10/02 18:40:00 by avegis           ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "parsing.h"
 #include "../libft/libft.h"
 #include <stdio.h>
@@ -15,7 +27,7 @@ int	check_valid(t_parse *info)
 		free (info->original);
 		return (0);
 	}
-	info->line[ft_strlen(info->line)-1] = 0;
+	info->line[ft_strlen(info->line) - 1] = 0;
 	return (1);
 }
 
@@ -36,7 +48,7 @@ int	set_id(char *str)
 	return (NONE);
 }
 
-int parse_type(char **arr, t_parse *info)
+int	parse_type(char **arr, t_parse *info)
 {
 	int	error;
 
