@@ -24,17 +24,19 @@ typedef struct s_parse
 	t_color	color;
 	double	v1;
 	double	v2;
+	char	*line;
+	char	*original;
 }	t_parse;
 
-int		check_valid(char *line);
-void	set_info(char *line, t_parse *info);
+int	check_valid(t_parse *info);
+int	set_info(t_parse *info);
 
-int 	create_vector(char *str, t_vec3 *out);
-int		parse_ambient(char **arr, t_parse *info);
-int		parse_camera(char **arr, t_parse *info);
-int		parse_light(char **arr, t_parse *info);
-int		parse_sphere(char **arr, t_parse *info);
-int		parse_plane(char **arr, t_parse *info);
-int		parse_cylinder(char **arr, t_parse *info);
+int create_vector(char *str, t_vec3 *out, double multi);
+int	parse_ambient(char **arr, t_parse *info);
+int	parse_camera(char **arr, t_parse *info);
+int	parse_light(char **arr, t_parse *info);
+int	parse_sphere(char **arr, t_parse *info);
+int	parse_plane(char **arr, t_parse *info);
+int	parse_cylinder(char **arr, t_parse *info);
 
 #endif

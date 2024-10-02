@@ -29,7 +29,7 @@ void displayProgressBar(int progress, int total) {
     fflush(stdout);  // Flush the output buffer to ensure immediate display
 }
 
-void free_shape_list(t_list *list)
+static void free_shape_list(t_list *list, int fd)
 {
 	t_list *next;
 	
@@ -46,6 +46,7 @@ void free_shape_list(t_list *list)
 		free(list);
 		list = next;
 	}
+	close (fd);
 }
 
 static void init_ambient(t_scene *scene, t_parse info)
@@ -122,41 +123,34 @@ static void init_shape(t_list **list, t_parse info, int *id)
 	(*id)++;
 }
 
-static void handle_info(t_scene *scene, t_camera *camera, t_image *image, int fd)
+static int handle_info(t_scene *scene, t_camera *camera, t_image *image, int fd)
 {
-	char	*line;
 	t_parse	info;
 	int		id;
 
 	id = 0;
-	line = "";
-	while (line)
-	{
-		line = get_next_line(fd);
-		if (check_valid(line) == 0)
-		{
-			set_info(line, &info);
-			if (info.id == ID_CAMERA)
-			{
-				printf("init camera\n");
-				*camera = init_camera(info.pos, info.orien, *image, info.v1);
-			}
-			if (info.id == ID_AMBIENT)
-			{
-				printf("init ambient\n");
-				init_ambient(scene, info);
-			}
-			if (info.id == ID_LIGHT)
-			{
-				printf("init light\n");
-				init_light(scene, info);
-			}
-			if (info.id == ID_CYLINDER || info.id == ID_PLANE || info.id == ID_SPHERE)
-				init_shape(&scene->objects, info, &id);
-		}
-		if (line)
-			free(line);
-	}
+	// info.original = "";
+	// while (info.original)
+	// {
+		info.original = get_next_line(fd);
+		printf("string = [%s]", info.original);
+	// 	if (check_valid(&info))
+	// 	{
+	// 		if (set_info(&info) == 1)
+	// 			return (1);
+	// 		if (info.id == ID_CAMERA)
+	// 			*camera = init_camera(info.pos, info.orien, *image, info.v1);
+	// 		if (info.id == ID_AMBIENT)
+	// 			init_ambient(scene, info);
+	// 		if (info.id == ID_LIGHT)
+	// 			init_light(scene, info);
+	// 		if (info.id == ID_CYLINDER || info.id == ID_PLANE || info.id == ID_SPHERE)
+	// 			init_shape(&scene->objects, info, &id);
+	// 		printf("string = [%s]", info.original);
+			free(info.original);
+	// 	}
+	// }
+	return (0);
 }
 
 int	main(int argc, char **argv)
@@ -179,9 +173,14 @@ int	main(int argc, char **argv)
 		return (1);
 	}
 	scene.objects = 0;
-	handle_info(&scene, &camera, &image, fd);
+	if (handle_info(&scene, &camera, &image, fd) == 1)
+	{
+		printf("error\n");
+		free_shape_list(scene.objects, fd);
+		return (1);
+	}
 	scene.camera = &camera;
-	render(image, &scene);
-	close (fd);
+	// render(image, &scene);
+	free_shape_list(scene.objects, fd);
 	return (0);
 }

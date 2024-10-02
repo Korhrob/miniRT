@@ -21,7 +21,7 @@ t_camera	init_camera(t_point look_from, t_point look_at,
 	cam.fov_radian = fov_degree * PI / 180.0;
 	cam.focal_length = 1;
 	cam.viewport_width = 2.0 * tan(cam.fov_radian / (2.0 * cam.focal_length));
-	cam.viewport_height = cam.viewport_width * image.aspect_ratio;
+	cam.viewport_height = cam.viewport_width / image.aspect_ratio;
 	cam.center = vvec3(look_from);
 	w = unit_vector(vv_sub(look_from, look_at));
 	u = unit_vector(cross(vec3(0, 1, 0), w));
