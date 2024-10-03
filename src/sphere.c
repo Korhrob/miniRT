@@ -15,7 +15,7 @@ static void	sphere_calc(t_ray *ray, t_sphere *this, t_sp_calc *calc)
 	calc->oc = vv_sub(this->shape.pos, ray->origin);
 	calc->a = v_len_squared(ray->dir);
 	calc->h = vv_dot(ray->dir, calc->oc);
-	calc->c = v_len_squared(calc->oc) - (this->radius * this->radius);
+	calc->c = v_len_squared(calc->oc) - (this->radius);
 	calc->discriminant = calc->h * calc->h - calc->a * calc->c;
 }
 
