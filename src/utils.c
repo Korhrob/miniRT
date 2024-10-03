@@ -32,5 +32,11 @@ t_vec3	v_clamp(t_vec3 v)
 		o.y = 1;
 	if (o.z > 1)
 		o.z = 1;
+	if (o.x < 0)
+		o.x = 0;
+	if (o.y < 0)
+		o.y = 0;
+	if (o.z < 0)
+		o.z = 0;
 	return (o);
 }
