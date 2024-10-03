@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   vector.h                                           :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: rkorhone <rkorhone@student.hive.fi>        +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2024/10/03 15:35:15 by rkorhone          #+#    #+#             */
+/*   Updated: 2024/10/03 15:35:16 by rkorhone         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #ifndef VECTOR_H
 # define VECTOR_H
 
@@ -22,6 +34,5 @@ t_vec3	vv_mul(t_vec3 a, t_vec3 b);
 double	vv_dot(t_vec3 a, t_vec3 b);
 t_vec3	unit_vector(t_vec3 v);
 t_vec3	cross(t_vec3 a, t_vec3 b);
-t_vec3	local(t_vec3 vec, t_vec3 u, t_vec3 v, t_vec3 w);
 
 #endif

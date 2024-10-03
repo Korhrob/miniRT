@@ -1,9 +1,22 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   camera.h                                           :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: rkorhone <rkorhone@student.hive.fi>        +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2024/10/03 15:33:31 by rkorhone          #+#    #+#             */
+/*   Updated: 2024/10/03 15:33:32 by rkorhone         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #ifndef CAMERA_H
 # define CAMERA_H
 
 # include "vector.h"
 # include "image.h"
 # include "scene.h"
+# include "../mlx42/include/MLX42/MLX42.h"
 
 typedef struct s_camera
 {
@@ -21,6 +34,6 @@ typedef struct s_camera
 }	t_camera;
 
 t_camera	init_camera(t_point from, t_point to, t_image image, double fov_d);
-void		render(t_image image, t_scene *scene);
+void		render(mlx_t *mlx, mlx_image_t *img, t_image image, t_scene *scene);
 
 #endif

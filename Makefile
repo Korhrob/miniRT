@@ -7,8 +7,9 @@ LIBFTLIB	=	$(LIBFT)/libft.a
 CC			=	cc
 CCFLAG		=	-g  # -Wall -Werror -Wextra
 LIBS		=	$(LIBFTLIB) $(MLX42LIB) -ldl -lglfw -pthread -lm
-SRC			=	src/main.c src/vector.c src/color.c src/image.c src/camera.c \
-				src/range.c src/ray.c src/list.c src/light.c src/utils.c \
+SRC			=	src/main.c src/color.c src/image.c src/camera.c \
+				src/vector.c src/vector_two.c src/vector_three.c \
+				src/range.c src/ray.c src/list.c src/light.c src/utils.c src/render.c \
 				src/shape.c src/sphere.c src/plane.c src/cylinder.c  src/cylinder_utils.c \
 				src/parsing.c src/parsing_func.c src/parsing_func_more.c src/init_shape.c
 OBJ			=	$(SRC:.c=.o)

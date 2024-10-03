@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   light.c                                            :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: rkorhone <rkorhone@student.hive.fi>        +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2024/10/03 15:25:02 by rkorhone          #+#    #+#             */
+/*   Updated: 2024/10/03 15:25:04 by rkorhone         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "scene.h"
 #include "light.h"
 #include "vector.h"
@@ -11,7 +23,8 @@ static t_color	calc_ambient(t_hit *rec, t_scene *scene)
 	t_color	ambient;
 
 	ambient = vv_mul(rec->color, scene->ambient.color);
-	ambient = v_mul(rec->color, scene->ambient.strength);
+	ambient = v_mul(ambient, scene->ambient.strength);
+	ambient = v_clamp(ambient);
 	return (ambient);
 }
 
