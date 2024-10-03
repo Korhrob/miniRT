@@ -1,7 +1,7 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   vector.c                                           :+:      :+:    :+:   */
+/*   vector_two.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: rkorhone <rkorhone@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
@@ -13,51 +13,46 @@
 #include "vector.h"
 #include <math.h>
 
-t_vec3	vec3(double x, double y, double z)
+// vec3.xyz + vec3.xyz
+t_vec3	vv_sum(t_vec3 a, t_vec3 b)
 {
 	t_vec3	o;
 
-	o.x = x;
-	o.y = y;
-	o.z = z;
+	o.x = (a.x + b.x);
+	o.y = (a.y + b.y);
+	o.z = (a.z + b.z);
 	return (o);
 }
 
-t_vec3	vvec3(t_vec3 v)
+// vec3.xyz - vec3.xyz
+t_vec3	vv_sub(t_vec3 a, t_vec3 b)
 {
 	t_vec3	o;
 
-	o.x = v.x;
-	o.y = v.y;
-	o.z = v.z;
+	o.x = (a.x - b.x);
+	o.y = (a.y - b.y);
+	o.z = (a.z - b.z);
 	return (o);
 }
 
-// vec.xyz * t
-t_vec3	v_mul(t_vec3 v, double t)
+// vec3.xyz * vec3.xyz
+t_vec3	vv_mul(t_vec3 a, t_vec3 b)
 {
 	t_vec3	o;
 
-	o.x = (v.x * t);
-	o.y = (v.y * t);
-	o.z = (v.z * t);
+	o.x = (a.x * b.x);
+	o.y = (a.y * b.y);
+	o.z = (a.z * b.z);
 	return (o);
 }
 
-// vec.xyz * (1/t)
-t_vec3	v_div(t_vec3 v, double t)
+// (vec3.x * vec3.x) + (vec3.y * vec3.y) + (vec3.z * vec3.z)
+double	vv_dot(t_vec3 a, t_vec3 b)
 {
-	t_vec3	o;
+	double	dot;
 
-	if (t == 0)
-	{
-		o.x = 0;
-		o.y = 0;
-		o.z = 0;
-		return (o);
-	}
-	o.x = v.x * (1 / t);
-	o.y = v.y * (1 / t);
-	o.z = v.z * (1 / t);
-	return (o);
+	dot = (a.x * b.x)
+		+ (a.y * b.y)
+		+ (a.z * b.z);
+	return (dot);
 }

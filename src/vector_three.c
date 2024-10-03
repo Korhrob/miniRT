@@ -1,7 +1,7 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   vector.c                                           :+:      :+:    :+:   */
+/*   vector_three.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: rkorhone <rkorhone@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
@@ -13,51 +13,37 @@
 #include "vector.h"
 #include <math.h>
 
-t_vec3	vec3(double x, double y, double z)
+double	v_len(t_vec3 v)
+{
+	return (sqrt(v_len_squared(v)));
+}
+
+double	v_len_squared(t_vec3 v)
+{
+	double	len_squared;
+
+	len_squared = (v.x * v.x)
+		+ (v.y * v.y)
+		+ (v.z * v.z);
+	return (len_squared);
+}
+
+//	vec3.xyz / vec3 len
+t_vec3	unit_vector(t_vec3 v)
 {
 	t_vec3	o;
 
-	o.x = x;
-	o.y = y;
-	o.z = z;
+	o = v_div(v, v_len(v));
 	return (o);
 }
 
-t_vec3	vvec3(t_vec3 v)
+t_vec3	cross(t_vec3 a, t_vec3 b)
 {
 	t_vec3	o;
 
-	o.x = v.x;
-	o.y = v.y;
-	o.z = v.z;
+	o.x = (a.y * b.z - a.z * b.y);
+	o.y = (a.z * b.x - a.x * b.z);
+	o.z = (a.x * b.y - a.y * b.x);
 	return (o);
 }
 
-// vec.xyz * t
-t_vec3	v_mul(t_vec3 v, double t)
-{
-	t_vec3	o;
-
-	o.x = (v.x * t);
-	o.y = (v.y * t);
-	o.z = (v.z * t);
-	return (o);
-}
-
-// vec.xyz * (1/t)
-t_vec3	v_div(t_vec3 v, double t)
-{
-	t_vec3	o;
-
-	if (t == 0)
-	{
-		o.x = 0;
-		o.y = 0;
-		o.z = 0;
-		return (o);
-	}
-	o.x = v.x * (1 / t);
-	o.y = v.y * (1 / t);
-	o.z = v.z * (1 / t);
-	return (o);
-}

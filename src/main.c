@@ -24,6 +24,7 @@
 #include "scene.h"
 #include "../libft/libft.h"
 #include "parsing.h"
+#include "render.h"
 
 static void	free_shape_list(t_list *list, int fd)
 {
@@ -119,7 +120,10 @@ int	main(int argc, char **argv)
 		return (1);
 	}
 	scene.camera = &camera;
-	render(image, &scene);
+	if (render_start(image, &scene) == 0)
+	{
+		// mlx error
+	}
 	free_shape_list(scene.objects, fd);
 	return (0);
 }

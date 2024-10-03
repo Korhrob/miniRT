@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   camera.c                                           :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: rkorhone <rkorhone@student.hive.fi>        +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2024/10/03 15:24:08 by rkorhone          #+#    #+#             */
+/*   Updated: 2024/10/03 15:24:11 by rkorhone         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include <math.h>
 #include "minirt.h"
 #include "camera.h"
@@ -36,15 +48,6 @@ t_camera	init_camera(t_point look_from, t_point look_at,
 	return (cam);
 }
 
-void	esc_hook(void *ptr)
-{
-	mlx_t	*mlx;
-
-	mlx = ptr;
-	if (mlx_is_key_down(mlx, MLX_KEY_ESCAPE))
-		mlx_close_window(mlx);
-}
-
 static t_color	get_pixel_color(mlx_image_t	*img, t_scene *scene, int x, int y)
 {
 	t_point		pixel_center;
@@ -76,22 +79,12 @@ static int32_t	color_to_pixel(t_color color)
 	return (pixel);
 }
 
-void	render(t_image image, t_scene *scene)
+void	render(mlx_t *mlx, mlx_image_t *img, t_image image, t_scene *scene)
 {
-	mlx_t		*mlx;
-	mlx_image_t	*img;
 	t_color		color;
 	int			x;
 	int			y;
 
-	mlx = mlx_init(image.width, image.height, "miniRT", true);
-	if (!mlx)
-		return ;
-	img = mlx_new_image(mlx, image.width, image.height);
-	if (!img)
-		return ;
-	mlx_set_setting(MLX_STRETCH_IMAGE, true);
-	mlx_image_to_window(mlx, img, 0, 0);
 	y = 0;
 	while (y < image.height)
 	{
@@ -104,8 +97,4 @@ void	render(t_image image, t_scene *scene)
 		}
 		y++;
 	}
-	mlx_loop_hook(mlx, esc_hook, mlx);
-	mlx_loop(mlx);
-	mlx_delete_image(mlx, img);
-	mlx_terminate(mlx);
 }
