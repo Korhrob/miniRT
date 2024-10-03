@@ -103,6 +103,8 @@ t_cylinder	*new_cylinder(t_point pos, t_vec3 size,
 		return (NULL);
 	cylinder->shape.pos = vvec3(pos);
 	cylinder->shape.color = vvec3(color);
+	if (v_len(orientation) == 0)
+		orientation = vec3(0, 1, 0);
 	cylinder->orientation = vvec3(orientation);
 	cylinder->radius = size.x;
 	cylinder->length = size.y;

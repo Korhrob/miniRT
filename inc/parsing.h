@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   parsing.h                                          :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: avegis <marvin@42.fr>                      +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2024/10/03 16:43:24 by avegis            #+#    #+#             */
+/*   Updated: 2024/10/03 16:43:26 by avegis           ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #ifndef PARSING_H
 # define PARSING_H
 
@@ -29,8 +41,8 @@ typedef struct s_parse
 	char	*original;
 }	t_parse;
 
-int	check_valid(t_parse *info);
-int	set_info(t_parse *info);
+int		check_valid(t_parse *info);
+int		set_info(t_parse *info);
 
 int		check_range(t_vec3 *vector, double min, double max);
 int		create_vector(char *str, t_vec3 *out, double multi);

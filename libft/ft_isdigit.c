@@ -31,12 +31,12 @@ int	ft_isdigit_str(char *str)
 	return (1);
 }
 
-int ft_isdouble_str(char *str)
+int	ft_isdouble_str(char *str)
 {
 	char	**split;
 	char	*temp;
 	int		i;
-	
+
 	i = 0;
 	temp = str;
 	while (*temp)

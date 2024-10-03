@@ -17,7 +17,7 @@
 int			ft_isalpha(unsigned char c);
 int			ft_isdigit(unsigned char c);
 int			ft_isdigit_str(char *str);
-int 		ft_isdouble_str(char *str);
+int			ft_isdouble_str(char *str);
 int			ft_isalnum(unsigned char c);
 int			ft_isascii(unsigned char c);
 int			ft_isprint(unsigned char c);

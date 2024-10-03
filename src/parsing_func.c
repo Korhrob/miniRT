@@ -14,6 +14,24 @@
 #include "../libft/libft.h"
 #include <stdio.h>
 
+static int check_vector(char *str)
+{
+	char	*temp;
+	int		i;
+
+	temp = str;
+	i = 0;
+	while (*temp)
+	{
+		if (*temp == ',')
+			i++;
+		temp++;
+	}
+	if (i != 2)
+		return (1);
+	return (0);
+}
+
 int	check_range(t_vec3 *vector, double min, double max)
 {
 	if (vector->x < min || vector->x > max)
@@ -31,6 +49,8 @@ int	create_vector(char *str, t_vec3 *out, double multi)
 	int		error;
 
 	error = 0;
+	if (check_vector(str) == 1)
+		return (1);
 	d_arr = ft_split(str, ',');
 	if (!d_arr)
 		return (1);

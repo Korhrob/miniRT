@@ -88,9 +88,22 @@ static int	handle_info(t_scene *scene,
 
 int	check_error(int argc, int *fd, char *file)
 {
+	int	len;
+
 	if (argc != 2)
 	{
 		ft_printf("Invalid argument count!!!\n");
+		return (1);
+	}
+	len = ft_strlen(file);
+	if (len < 4)
+	{
+		ft_printf("Invalid file name!!!\n");
+		return (1);
+	}
+	if (ft_strcmp(file + len - 3, ".rt"))
+	{
+		ft_printf("Invalid file extension!!!\n");
 		return (1);
 	}
 	*fd = open(file, O_RDONLY);

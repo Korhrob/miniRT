@@ -70,6 +70,8 @@ t_plane	*new_plane(t_point pos, t_vec3 size, t_vec3 orientation, t_color color)
 		return (NULL);
 	plane->shape.pos = vvec3(pos);
 	plane->size = vvec3(size);
+	if (v_len(orientation) == 0)
+		orientation = vec3(0, 1, 0);
 	plane->orientation = unit_vector(orientation);
 	plane->u = unit_vector(get_perpendicular(orientation));
 	plane->v = unit_vector(cross(orientation, plane->u));
