@@ -46,4 +46,3 @@ t_vec3	cross(t_vec3 a, t_vec3 b)
 	o.z = (a.x * b.y - a.y * b.x);
 	return (o);
 }
-
