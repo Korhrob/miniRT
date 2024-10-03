@@ -26,7 +26,7 @@ static void	sphere_calc(t_ray *ray, t_sphere *this, t_sp_calc *calc)
 	calc->oc = vv_sub(this->shape.pos, ray->origin);
 	calc->a = v_len_squared(ray->dir);
 	calc->h = vv_dot(ray->dir, calc->oc);
-	calc->c = v_len_squared(calc->oc) - (this->radius);
+	calc->c = v_len_squared(calc->oc) - (this->radius * this->radius);
 	calc->discriminant = calc->h * calc->h - calc->a * calc->c;
 }
 
@@ -71,7 +71,7 @@ t_sphere	*new_sphere(t_point pos, double radius, t_color color)
 	if (!sphere)
 		return (NULL);
 	sphere->shape.pos = vvec3(pos);
-	sphere->radius = radius;
+	sphere->radius = radius / 2.0;
 	sphere->shape.color = vvec3(color);
 	sphere->hit = hit_sphere;
 	return (sphere);
