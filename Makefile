@@ -5,7 +5,7 @@ LIBFT		=	libft
 LIBFTINC	=	$(LIBFT)/libft.h
 LIBFTLIB	=	$(LIBFT)/libft.a
 CC			=	cc
-CCFLAG		=	-g  # -Wall -Werror -Wextra
+CCFLAG		=	-g -Wall -Werror -Wextra
 LIBS		=	$(LIBFTLIB) $(MLX42LIB) -ldl -lglfw -pthread -lm
 SRC			=	src/main.c src/color.c src/image.c src/camera.c \
 				src/vector.c src/vector_two.c src/vector_three.c \

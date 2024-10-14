@@ -34,6 +34,6 @@ typedef struct s_camera
 }	t_camera;
 
 t_camera	init_camera(t_point from, t_point to, t_image image, double fov_d);
-void		render(mlx_t *mlx, mlx_image_t *img, t_image image, t_scene *scene);
+void		render(mlx_image_t *img, t_image image, t_scene *scene);
 
 #endif
