@@ -36,7 +36,7 @@ static void	calc_cylinder(t_ray *ray, t_cylinder *this, t_cl_calc *calc)
 	calc->discriminant = (calc->h * calc->h) - (calc->a * calc->c);
 }
 
-static void	record(t_ray *ray, t_hit *rec, t_cylinder *this, t_cl_calc *calc)
+static void	record(t_ray *ray, t_hit *rec, t_cylinder *this)
 {
 	t_vec3	projection;
 	t_vec3	normal_vec;
@@ -74,7 +74,7 @@ int	hit_cylinder(t_ray *ray, t_range range, t_cylinder *this, t_hit *rec)
 	y = vv_dot(rec->point, this->w) - vv_dot(this->shape.pos, this->w);
 	if (y < -(this->length / 2.0) || y > (this->length / 2.0))
 		return (FALSE);
-	record(ray, rec, this, &calc);
+	record(ray, rec, this);
 	return (TRUE);
 }
 

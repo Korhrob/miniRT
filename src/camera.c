@@ -49,7 +49,7 @@ t_camera	init_camera(t_point look_from, t_point look_at,
 	return (cam);
 }
 
-static t_color	get_pixel_color(mlx_image_t	*img, t_scene *scene, int x, int y)
+static t_color	get_pixel_color(t_scene *scene, int x, int y)
 {
 	t_point		pixel_center;
 	t_vec3		ray_direction;
@@ -80,7 +80,7 @@ static int32_t	color_to_pixel(t_color color)
 	return (pixel);
 }
 
-void	render(mlx_t *mlx, mlx_image_t *img, t_image image, t_scene *scene)
+void	render(mlx_image_t *img, t_image image, t_scene *scene)
 {
 	t_color		color;
 	int			x;
@@ -92,7 +92,7 @@ void	render(mlx_t *mlx, mlx_image_t *img, t_image image, t_scene *scene)
 		x = 0;
 		while (x < image.width)
 		{
-			color = get_pixel_color(img, scene, x, y);
+			color = get_pixel_color(scene, x, y);
 			mlx_put_pixel(img, x, y, color_to_pixel(color));
 			x++;
 		}

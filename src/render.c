@@ -39,7 +39,7 @@ int	render_start(t_image image, t_scene *scene)
 	mlx_set_setting(MLX_STRETCH_IMAGE, true);
 	if (mlx_image_to_window(mlx, img, 0, 0) == -1)
 		return (0);
-	render(mlx, img, image, scene);
+	render(img, image, scene);
 	mlx_loop_hook(mlx, esc_hook, mlx);
 	mlx_loop(mlx);
 	mlx_delete_image(mlx, img);

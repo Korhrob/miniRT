@@ -44,7 +44,6 @@ static t_color	calc_shadow(t_hit *rec, t_scene *scene,
 		t_color ambient, t_color diffuse)
 {
 	t_ray	s_ray;
-	t_hit	s_rec;
 	t_args	args;
 	double	l_dist;
 
@@ -53,9 +52,9 @@ static t_color	calc_shadow(t_hit *rec, t_scene *scene,
 	args.ignore_id = rec->shape_id;
 	args.scene = scene;
 	args.rec = rec;
-	args.ray = &s_ray;
 	s_ray.origin = rec->point;
 	s_ray.dir = unit_vector(vv_sub(scene->light.pos, rec->point));
+	args.ray = &s_ray;
 	if (ray_hit(&args))
 		return (ambient);
 	return (diffuse);
