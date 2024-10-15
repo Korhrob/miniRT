@@ -134,9 +134,7 @@ int	main(int argc, char **argv)
 	}
 	scene.camera = &camera;
 	if (render_start(image, &scene) == 0)
-	{
-		// mlx error
-	}
+		printf("Mlx sucks and didnt work!!!\n");
 	free_shape_list(scene.objects, fd);
 	return (0);
 }

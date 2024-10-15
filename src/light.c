@@ -23,6 +23,7 @@ static t_color	calc_ambient(t_hit *rec, t_scene *scene)
 	t_color	ambient;
 
 	ambient = vv_mul(rec->color, scene->ambient.color);
+	ambient = vv_sum(ambient, scene->ambient.color);
 	ambient = v_mul(ambient, scene->ambient.strength);
 	ambient = v_clamp(ambient);
 	return (ambient);

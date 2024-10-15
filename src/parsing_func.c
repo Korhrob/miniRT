@@ -14,7 +14,7 @@
 #include "../libft/libft.h"
 #include <stdio.h>
 
-static int check_vector(char *str)
+static int	check_vector(char *str)
 {
 	char	*temp;
 	int		i;

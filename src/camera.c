@@ -20,6 +20,14 @@
 #include "color.h"
 #include "../mlx42/include/MLX42/MLX42.h"
 
+static void	set_base(t_camera *cam, t_image *image)
+{
+	cam->focal_length = 1;
+	cam->viewport_width = 2.0 * tan(cam->fov_radian
+			/ (2.0 * cam->focal_length));
+	cam->viewport_height = cam->viewport_width / image->aspect_ratio;
+}
+
 t_camera	init_camera(t_point look_from, t_point look_at,
 	t_image image, double fov_degree)
 {
@@ -29,13 +37,13 @@ t_camera	init_camera(t_point look_from, t_point look_at,
 	t_vec3		w;
 
 	cam.fov_radian = fov_degree * PI / 180.0;
-	cam.focal_length = 1;
-	cam.viewport_width = 2.0 * tan(cam.fov_radian / (2.0 * cam.focal_length));
-	cam.viewport_height = cam.viewport_width / image.aspect_ratio;
+	set_base(&cam, &image);
 	cam.center = vvec3(look_from);
-	look_at = vv_sum(look_from, look_at);
-	w = unit_vector(vv_sub(look_from, look_at));
+	look_at = v_mul(look_at, -1);
+	w = unit_vector(look_at);
 	u = unit_vector(cross(vec3(0, 1, 0), w));
+	if (look_at.x < 1e-6 && look_at.z < 1e-6)
+		u = unit_vector(cross(vec3(1, 0, 0), w));
 	v = cross(w, u);
 	cam.viewport_u = v_mul(u, cam.viewport_width);
 	cam.viewport_v = v_mul(v_mul(v, -1), cam.viewport_height);
