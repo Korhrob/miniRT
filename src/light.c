@@ -22,9 +22,8 @@ static t_color	calc_ambient(t_hit *rec, t_scene *scene)
 {
 	t_color	ambient;
 
-	ambient = vv_mul(rec->color, scene->ambient.color);
-	ambient = v_mul(ambient, scene->ambient.strength);
-	ambient = v_clamp(ambient);
+	ambient = vv_mul(scene->ambient.color, rec->color);
+	ambient = v_clamp(scene->ambient.color);
 	return (ambient);
 }
 
@@ -65,11 +64,14 @@ t_color	calc_light(t_hit *rec, t_scene *scene)
 	t_color	color;
 	t_color	ambient;
 	t_color	diffuse;
+	t_color	mixed;
 
 	ambient = calc_ambient(rec, scene);
 	diffuse = calc_diffuse(rec, scene);
-	diffuse = vv_sum(ambient, diffuse);
-	diffuse = v_clamp(diffuse);
-	color = calc_shadow(rec, scene, ambient, diffuse);
+	ambient = v_mul(ambient, scene->ambient.strength);
+	diffuse = v_mul(diffuse, 1 - scene->ambient.strength);
+	mixed = vv_sum(ambient, diffuse);
+	mixed = v_clamp(mixed);
+	color = calc_shadow(rec, scene, ambient, mixed);
 	return (color);
 }
