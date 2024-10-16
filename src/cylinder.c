@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   cylinder.c                                         :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: rkorhone <rkorhone@student.hive.fi>        +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2024/10/03 15:24:34 by rkorhone          #+#    #+#             */
+/*   Updated: 2024/10/03 15:24:35 by rkorhone         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include <stdio.h>
 
 #include <stdlib.h>
@@ -20,11 +32,11 @@ static void	calc_cylinder(t_ray *ray, t_cylinder *this, t_cl_calc *calc)
 		* vv_dot(calc->oc, this->w);
 	calc->c = vv_dot(calc->oc, calc->oc)
 		- pow(vv_dot(calc->oc, this->w), 2)
-		- pow(this->radius, 2);
+		- (this->radius * this->radius);
 	calc->discriminant = (calc->h * calc->h) - (calc->a * calc->c);
 }
 
-static void	record(t_ray *ray, t_hit *rec, t_cylinder *this, t_cl_calc *calc)
+static void	record(t_ray *ray, t_hit *rec, t_cylinder *this)
 {
 	t_vec3	projection;
 	t_vec3	normal_vec;
@@ -62,7 +74,7 @@ int	hit_cylinder(t_ray *ray, t_range range, t_cylinder *this, t_hit *rec)
 	y = vv_dot(rec->point, this->w) - vv_dot(this->shape.pos, this->w);
 	if (y < -(this->length / 2.0) || y > (this->length / 2.0))
 		return (FALSE);
-	record(ray, rec, this, &calc);
+	record(ray, rec, this);
 	return (TRUE);
 }
 
@@ -91,8 +103,10 @@ t_cylinder	*new_cylinder(t_point pos, t_vec3 size,
 		return (NULL);
 	cylinder->shape.pos = vvec3(pos);
 	cylinder->shape.color = vvec3(color);
+	if (v_len(orientation) == 0)
+		orientation = vec3(0, 1, 0);
 	cylinder->orientation = vvec3(orientation);
-	cylinder->radius = size.x;
+	cylinder->radius = size.x / 2;
 	cylinder->length = size.y;
 	cylinder->hit = hit_cylinder;
 	cylinder->u = unit_vector(get_perpendicular(orientation));

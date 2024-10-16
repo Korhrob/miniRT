@@ -1,9 +1,14 @@
-
-
-#include <fcntl.h> // open
-#include <stdio.h> // printf
-#include <stdlib.h> // exit
-#include <unistd.h> // close
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   image.c                                            :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: rkorhone <rkorhone@student.hive.fi>        +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2024/10/03 15:24:50 by rkorhone          #+#    #+#             */
+/*   Updated: 2024/10/03 15:24:51 by rkorhone         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
 
 #include "image.h"
 

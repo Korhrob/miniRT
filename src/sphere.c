@@ -1,3 +1,14 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   sphere.c                                           :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: rkorhone <rkorhone@student.hive.fi>        +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2024/10/03 15:25:58 by rkorhone          #+#    #+#             */
+/*   Updated: 2024/10/03 15:25:59 by rkorhone         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
 
 #include <stdlib.h>
 #include <math.h>
@@ -60,7 +71,7 @@ t_sphere	*new_sphere(t_point pos, double radius, t_color color)
 	if (!sphere)
 		return (NULL);
 	sphere->shape.pos = vvec3(pos);
-	sphere->radius = radius;
+	sphere->radius = radius / 2.0;
 	sphere->shape.color = vvec3(color);
 	sphere->hit = hit_sphere;
 	return (sphere);

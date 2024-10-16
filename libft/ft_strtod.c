@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   ft_strtod.c                                        :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: avegis <marvin@42.fr>                      +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2024/10/03 16:42:17 by avegis            #+#    #+#             */
+/*   Updated: 2024/10/03 16:42:22 by avegis           ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "libft.h"
 
 static void	check_sign(const char *str, int *sign, int *i)
@@ -11,8 +23,6 @@ static void	check_sign(const char *str, int *sign, int *i)
 	else if (str[*i] == '+')
 		(*i)++;
 }
-
-#include <stdio.h>
 
 double	ft_strtod(const char *str)
 {

@@ -1,6 +1,16 @@
-#include <unistd.h> // close
-#include <stdio.h> // printf
-#include <math.h> // tan
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   camera.c                                           :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: rkorhone <rkorhone@student.hive.fi>        +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2024/10/03 15:24:08 by rkorhone          #+#    #+#             */
+/*   Updated: 2024/10/03 15:24:11 by rkorhone         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
+#include <math.h>
 #include "minirt.h"
 #include "camera.h"
 #include "vector.h"
@@ -9,6 +19,14 @@
 #include "scene.h"
 #include "color.h"
 #include "../mlx42/include/MLX42/MLX42.h"
+
+static void	set_base(t_camera *cam, t_image *image)
+{
+	cam->focal_length = 1;
+	cam->viewport_width = 2.0 * tan(cam->fov_radian
+			/ (2.0 * cam->focal_length));
+	cam->viewport_height = cam->viewport_width / image->aspect_ratio;
+}
 
 t_camera	init_camera(t_point look_from, t_point look_at,
 	t_image image, double fov_degree)
@@ -19,12 +37,13 @@ t_camera	init_camera(t_point look_from, t_point look_at,
 	t_vec3		w;
 
 	cam.fov_radian = fov_degree * PI / 180.0;
-	cam.focal_length = 1;
-	cam.viewport_width = 2.0 * tan(cam.fov_radian / (2.0 * cam.focal_length));
-	cam.viewport_height = cam.viewport_width / image.aspect_ratio;
+	set_base(&cam, &image);
 	cam.center = vvec3(look_from);
-	w = unit_vector(vv_sub(look_from, look_at));
+	look_at = v_mul(look_at, -1);
+	w = unit_vector(look_at);
 	u = unit_vector(cross(vec3(0, 1, 0), w));
+	if (look_at.x < 1e-6 && look_at.z < 1e-6)
+		u = unit_vector(cross(vec3(1, 0, 0), w));
 	v = cross(w, u);
 	cam.viewport_u = v_mul(u, cam.viewport_width);
 	cam.viewport_v = v_mul(v_mul(v, -1), cam.viewport_height);
@@ -38,16 +57,7 @@ t_camera	init_camera(t_point look_from, t_point look_at,
 	return (cam);
 }
 
-void	esc_hook(void *ptr)
-{
-	mlx_t	*mlx;
-
-	mlx = ptr;
-	if (mlx_is_key_down(mlx, MLX_KEY_ESCAPE))
-		mlx_close_window(mlx);
-}
-
-static t_color	get_pixel_color(mlx_image_t	*img, t_scene *scene, int x, int y)
+static t_color	get_pixel_color(t_scene *scene, int x, int y)
 {
 	t_point		pixel_center;
 	t_vec3		ray_direction;
@@ -78,36 +88,22 @@ static int32_t	color_to_pixel(t_color color)
 	return (pixel);
 }
 
-void	render(t_image image, t_scene *scene)
+void	render(mlx_image_t *img, t_image image, t_scene *scene)
 {
-	mlx_t		*mlx;
-	mlx_image_t	*img;
 	t_color		color;
 	int			x;
 	int			y;
 
-	mlx = mlx_init(image.width, image.height, "miniRT", true);
-	if (!mlx)
-		return ;
-	img = mlx_new_image(mlx, image.width, image.height);
-	if (!img)
-		return ;
-	mlx_set_setting(MLX_STRETCH_IMAGE, true);
-	mlx_image_to_window(mlx, img, 0, 0); // if fail close window, return
 	y = 0;
 	while (y < image.height)
 	{
 		x = 0;
 		while (x < image.width)
 		{
-			color = get_pixel_color(img, scene, x, y);
+			color = get_pixel_color(scene, x, y);
 			mlx_put_pixel(img, x, y, color_to_pixel(color));
 			x++;
 		}
 		y++;
 	}
-	mlx_loop_hook(mlx, esc_hook, mlx);
-	mlx_loop(mlx);
-	mlx_delete_image(mlx, img);
-	mlx_terminate(mlx);
 }

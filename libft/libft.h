@@ -17,6 +17,7 @@
 int			ft_isalpha(unsigned char c);
 int			ft_isdigit(unsigned char c);
 int			ft_isdigit_str(char *str);
+int			ft_isdouble_str(char *str);
 int			ft_isalnum(unsigned char c);
 int			ft_isascii(unsigned char c);
 int			ft_isprint(unsigned char c);
@@ -114,17 +115,17 @@ int			ft_print_str_bonus(int fd, const char *s, va_list args);
 
 // get_next_line
 
+# ifndef BUFFER_SIZE
+#  define BUFFER_SIZE 42
+# endif
+
 struct s_read_buffer
 {
 	int		index;
 	int		start;
 	int		bytes;
-	char	*str;
+	char	str[BUFFER_SIZE];
 };
-
-# ifndef BUFFER_SIZE
-#  define BUFFER_SIZE 42
-# endif
 
 char		*init_str(char **src, int add_len);
 char		*copy_str(char *dest, struct s_read_buffer *buffer, int add_len);
