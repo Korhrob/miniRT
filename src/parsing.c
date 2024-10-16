@@ -17,6 +17,8 @@
 
 int	check_valid(t_parse *info)
 {
+	int	i;
+
 	if (!info->original)
 		return (0);
 	info->line = info->original;
@@ -27,7 +29,9 @@ int	check_valid(t_parse *info)
 		free (info->original);
 		return (0);
 	}
-	info->line[ft_strlen(info->line) - 1] = 0;
+	i = ft_strlen(info->line) - 1;
+	if (info->line[i] == '\n')
+		info->line[i] = 0;
 	return (1);
 }
 

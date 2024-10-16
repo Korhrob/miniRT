@@ -21,6 +21,8 @@
 #include "hit.h"
 #include "color.h"
 
+#include <stdio.h>
+
 static void	sphere_calc(t_ray *ray, t_sphere *this, t_sp_calc *calc)
 {
 	calc->oc = vv_sub(this->shape.pos, ray->origin);
